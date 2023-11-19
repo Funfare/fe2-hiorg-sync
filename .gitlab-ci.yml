@@ -4,6 +4,7 @@ default:
     - docker:24.0.5-dind
   before_script:
     - docker info
+    - docker login -u $CI_REGISTRY_USER -p $CI_JOB_TOKEN $CI_REGISTRY
 
 variables:
   # When you use the dind service, you must instruct Docker to talk with
