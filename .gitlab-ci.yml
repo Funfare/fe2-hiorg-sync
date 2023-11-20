@@ -3,9 +3,8 @@ default:
   services:
     - docker:24.0.5-dind
   before_script:
-    - docker info
     - echo $CI_REGISTRY
-    - docker login -u $CI_REGISTRY_USER -p $CI_JOB_TOKEN $CI_REGISTRY
+    - docker login -u $CI_CUSTOM_REGISTRY_USER -p $CI_CUSTOM_REGISTRY_PASS $CI_CUSTOM_REGISTRY
 
 variables:
   # When you use the dind service, you must instruct Docker to talk with
@@ -27,5 +26,5 @@ variables:
 build:
   stage: build
   script:
-    - docker build -t $CI_REGISTRY_IMAGE/app:latest-dev .
+    - docker build -t $CI_CUSTOM_REGISTRY/hiorg-fe2/app:latest-dev .
     - docker push
