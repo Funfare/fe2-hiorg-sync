@@ -27,4 +27,4 @@ build:
   stage: build
   script:
     - docker build -t $CI_CUSTOM_REGISTRY/hiorg-fe2/app:latest-dev .
-    - docker push
+    - docker push $CI_CUSTOM_REGISTRY/hiorg-fe2/app:latest-dev
