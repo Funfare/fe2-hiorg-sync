@@ -31,6 +31,6 @@ class OrganizationController extends Controller
             'fe2_provisioning_leader' => 'nullable',
         ]);
         $org->update($data);
-        return redirect()->route('organizations.edit')->with('message', 'Daten gespeichert');
+        return redirect()->route('settings')->with('message', 'Daten gespeichert');
     }
 }
