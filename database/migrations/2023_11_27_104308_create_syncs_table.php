@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignIdFor(\App\Models\Organization::class);
             $table->string('type');
-            $table->json('data');
+            $table->longText('data');
             $table->timestamps();
         });
     }

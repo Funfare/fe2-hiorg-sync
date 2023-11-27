@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('fe2_link')->nullable();
             $table->string('fe2_user')->nullable();
             $table->string('fe2_pass')->nullable();
-            $table->string('fe2_sync_token')->nullable();
+            $table->text('fe2_sync_token')->nullable();
             $table->string('fe2_provisioning_user')->nullable();
             $table->string('fe2_provisioning_leader')->nullable();
             $table->timestamps();

@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::table('organizations', function (Blueprint $table) {
             $table->string('hiorg_user')->nullable();
-            $table->string('hiorg_token')->nullable();
+            $table->text('hiorg_token')->nullable();
 
         });
     }
