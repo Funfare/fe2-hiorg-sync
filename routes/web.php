@@ -19,8 +19,13 @@ Route::get('/auth.php', [\App\Http\Controllers\AuthController::class, 'auth']);
 Route::middleware('auth')->group(function() {
     Route::get('/', [\App\Http\Controllers\OrganizationController::class, 'home'])->name('home');
     Route::get('/me', [\App\Http\Controllers\OrganizationController::class, 'me'])->name('me');
-    Route::get('/settings', [\App\Http\Controllers\OrganizationController::class, 'edit'])->name('settings');
-    Route::get('/settings/setAdmin', [\App\Http\Controllers\OrganizationController::class, 'setAdmin'])->name('settings.setAdmin');
-    Route::post('/settings', [\App\Http\Controllers\OrganizationController::class, 'update']);
-    Route::get('/sync/{sync}', [\App\Http\Controllers\SyncController::class, 'show'])->name('sync');
+    Route::get('/me/provisioning', [\App\Http\Controllers\OrganizationController::class, 'provisioning'])->name('me.prov');
+
+    Route::middleware('can:admin')->group(function() {
+        Route::get('/sync/{sync}', [\App\Http\Controllers\SyncController::class, 'show'])->name('sync');
+        Route::post('/settings', [\App\Http\Controllers\OrganizationController::class, 'update']);
+        Route::get('/settings/setAdmin', [\App\Http\Controllers\OrganizationController::class, 'setAdmin'])->name('settings.setAdmin');
+        Route::get('/settings', [\App\Http\Controllers\OrganizationController::class, 'edit'])->name('settings');
+
+    });
 });

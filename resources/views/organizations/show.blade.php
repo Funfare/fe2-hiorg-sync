@@ -5,7 +5,7 @@
 
     <p>
     Hallo {{ Auth::user()->name }},<br />
-        der nächste Abgleich der Daten zwischen Hiorg-Server und Fe2 ist am
+        der nächste Abgleich der Daten zwischen Hiorg-Server und aPager ist am
         @if(today() < \Carbon\Carbon::parse('2024-02-01'))
             01.02.2024
         @else
@@ -17,9 +17,9 @@
     </p>
     <p>
     <h4>Provisionierung</h4>
-    Um eine neue Provisionierung (Aktivierungsmail) zu erhalten, klicke bitte hier
+    <a href="{{ route('me.prov') }}">Um eine neue Provisionierung (Aktivierungsmail) zu erhalten, klicke bitte hier</a>
     </p>
-    @if(Auth::user()->is_admin)
+    @can('admin')
     <h3>Letzte Synchronisationen</h3>
     <table class="table table-striped">
         <tr>
@@ -51,5 +51,5 @@
             </tr>
         @endforelse
     </table>
-    @endif
+    @endcan
 @endsection
