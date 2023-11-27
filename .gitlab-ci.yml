@@ -32,3 +32,4 @@ deploy-dev:
     - mkdir -p ~/.ssh
     - chmod 700 ~/.ssh
     - ssh -o StrictHostKeyChecking=no root@iuk-wuerzburg.de "cd /var/docker/sync/ && docker compose pull web && docker compose up -d"
+    - ssh -o StrictHostKeyChecking=no root@iuk-wuerzburg.de "cd /var/docker/sync/ && docker compose exec web php artisan migrate --force"
