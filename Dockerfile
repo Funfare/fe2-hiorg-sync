@@ -15,7 +15,7 @@ RUN apt-get install -y \
         libzip-dev \
         zlib1g-dev \
         zip \
-  && docker-php-ext-install zip
+  && docker-php-ext-install zip pdo pdo_mysql
 
 COPY . /var/www
 
