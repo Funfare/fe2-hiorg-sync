@@ -14,7 +14,8 @@
             </svg>
             Es erfolgt keine Synchronisierung zum aPager und keine Alarmierung!
         </div>
-        <b>Bitte überprüfe deine Zugehörgkeit zur Gruppe "Handyalarmierung" und dein Geburtsdatum</b>
+        <b>Bitte überprüfe deine Zugehörgkeit zur Gruppe "Handyalarmierung" und dein Geburtsdatum</b> <br />
+        Änderungen kannst du über das 4JUH Formular <a href="https://www.4juh.de/workspaces/sanitaetsbereitschaft-wuerzburg/apps/form/zugaenge-edv-programme" target="_blank">Zugänge IT/Programme</a> beantragen.
     @else
 <p>
     Diese Daten werden automatisch übertragen. <br />

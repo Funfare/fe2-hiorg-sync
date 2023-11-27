@@ -18,6 +18,9 @@ class Juhw extends Generic implements Contract
         $attributes = collect($record['attributes']);
         $groups = $this->getGroups($attributes);
         $email = collect($attributes['benutzerdefinierte_felder'])->where('name', 'aPager E-Mail')->first()['value'];
+        if(!app()->environment('production')) {
+            $email = 'fe2-test-'.$record['id'].'@re-gister.com';
+        }
         return [
             "externalDbId" => $record['id'],
             "firstName" => $attributes['vorname'],

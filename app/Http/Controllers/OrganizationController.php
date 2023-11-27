@@ -8,13 +8,15 @@ use App\Models\Organization;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use League\OAuth2\Client\Provider\GenericProvider;
+use League\OAuth2\Client\Token\AccessToken;
 
 class OrganizationController extends Controller
 {
-    public function home()
+    public function home(GenericProvider $provider)
     {
         $org = \Auth::user()->organization;
-        return view('organizations.show', compact('org'));
+        $syncs = $org->syncs()->latest()->paginate(20);
+        return view('organizations.show', compact('org', 'syncs'));
     }
 
     public function me(GenericProvider $provider, Client $client)
@@ -71,6 +73,11 @@ class OrganizationController extends Controller
         session()->put('setAdminUser', true);
         $url = $provider->getAuthorizationUrl(['scope' => 'openid personal:read']);
         return redirect($url);
+    }
+
+    public function provisioning()
+    {
+
     }
 
 }

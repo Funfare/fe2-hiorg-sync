@@ -62,7 +62,7 @@ class fe2SyncUser extends Command
                 }
                 $sync['personList'][] = $helper->getDataFromRecord($record);
             }
-            $res = $client->post($org->fe2_link.'rest/addressbook/sync', [
+            $res = $client->post($org->fe2_link.'/rest/addressbook/sync', [
                 'json' => $sync,
                 'headers' => [
                     'Authorization' => $org->fe2_sync_token

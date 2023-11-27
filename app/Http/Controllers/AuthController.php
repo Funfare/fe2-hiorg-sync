@@ -54,8 +54,7 @@ class AuthController extends Controller
         } catch (\League\OAuth2\Client\Provider\Exception\IdentityProviderException $e) {
 
             // Failed to get the access token or user details.
-            dd($e);
-
+            return redirect()->route('home');
         }
     }
 
