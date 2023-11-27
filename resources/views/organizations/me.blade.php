@@ -3,7 +3,7 @@
 @section('content')
     <h2>{{ Auth::user()->organization->name }}</h2>
 
-    <a href="{{ route('home') }}" class="btn btn-secondary">Zurück</a>
+    <a href="{{ route('home') }}" class="btn btn-secondary pb-2">Zurück</a>
     @if(!$valid)
         <div class="alert alert-danger" role="alert">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
@@ -14,7 +14,7 @@
             </svg>
             Es erfolgt keine Synchronisierung zum aPager und keine Alarmierung!
         </div>
-        <b>Bitte überprüfe deine Zugehörgkeit zur Gruppe "Handyalarmierung" und dein Geburtsdatum</b> <br/>:
+        <b>Bitte überprüfe deine Zugehörgkeit zur Gruppe "Handyalarmierung" und dein Geburtsdatum</b>
     @else
 <p>
     Diese Daten werden automatisch übertragen. <br />
@@ -51,6 +51,6 @@
             </tr>
         </table>
     @endif
-    <p>Diese Daten werden für eine Stunde zwischengespeichert, eine Änderung im Hiorg-Server ist erst mit Verzögerung
+    <p class="pt-3">Diese Daten werden für eine Stunde zwischengespeichert, eine Änderung im Hiorg-Server ist erst mit Verzögerung
         sichtbar</p>
 @endsection

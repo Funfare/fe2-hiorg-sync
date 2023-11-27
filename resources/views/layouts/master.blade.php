@@ -34,10 +34,9 @@
                 </li>
                 @endcan
             </ul>
-            <form class="d-flex">
-                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                <button class="btn btn-outline-success" type="submit">Search</button>
-            </form>
+            <div class="d-flex">
+                <a href="{{ route('logout') }}" class="btn btn-outline-secondary">Logout</a>
+            </div>
         </div>
     </div>
 </nav>

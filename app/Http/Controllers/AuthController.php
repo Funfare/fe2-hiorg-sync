@@ -58,4 +58,17 @@ class AuthController extends Controller
 
         }
     }
+
+    public function logout()
+    {
+        $key = Auth::user()->organization->key;
+        Auth::logout();
+        return redirect('https://www.hiorg-server.de/?ov='.$key);
+    }
+
+    public function loginAsUser(User $user)
+    {
+        Auth::loginUsingId($user->id);
+        return redirect()->route('home');
+    }
 }

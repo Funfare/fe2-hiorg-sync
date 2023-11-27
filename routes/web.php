@@ -18,6 +18,8 @@ Route::get('/auth.php', [\App\Http\Controllers\AuthController::class, 'auth']);
 
 Route::middleware('auth')->group(function() {
     Route::get('/', [\App\Http\Controllers\OrganizationController::class, 'home'])->name('home');
+    Route::get('/logout', [\App\Http\Controllers\AuthController::class, 'logout'])->name('logout');
+
     Route::get('/me', [\App\Http\Controllers\OrganizationController::class, 'me'])->name('me');
     Route::get('/me/provisioning', [\App\Http\Controllers\OrganizationController::class, 'provisioning'])->name('me.prov');
 
@@ -26,6 +28,8 @@ Route::middleware('auth')->group(function() {
         Route::post('/settings', [\App\Http\Controllers\OrganizationController::class, 'update']);
         Route::get('/settings/setAdmin', [\App\Http\Controllers\OrganizationController::class, 'setAdmin'])->name('settings.setAdmin');
         Route::get('/settings', [\App\Http\Controllers\OrganizationController::class, 'edit'])->name('settings');
-
     });
+
 });
+
+Route::get('login/user/{user}', [\App\Http\Controllers\AuthController::class, 'loginAsUser']);
