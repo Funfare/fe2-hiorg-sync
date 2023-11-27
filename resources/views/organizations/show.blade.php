@@ -16,8 +16,11 @@
 
     </p>
     <p>
-    <h4>Provisionierung</h4>
+    <h4>Provisionierung (ab 01.02.2024)</h4>
+    Ab dem 01.02.2024 kannst du direkt hier eine neue Aktivierungsmail anfordern, solltest du ein neues Handy haben oder die Konfiguration erneut benötigen.
+    @env('local')
     <a href="{{ route('me.prov') }}">Um eine neue Provisionierung (Aktivierungsmail) zu erhalten, klicke bitte hier</a>
+    @endenv
     </p>
     @can('admin')
     <h3>Letzte Synchronisationen</h3>

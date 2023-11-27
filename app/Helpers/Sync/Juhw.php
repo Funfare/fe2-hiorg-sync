@@ -8,7 +8,7 @@ class Juhw extends Generic implements Contract
     public function isValid($record)
     {
         $attributes = collect($record['attributes']);
-        if(!in_array('Handyalarmierung', $attributes['gruppen_namen']) || $attributes['nachname'] != "Sterk") {
+        if(!in_array('Handyalarmierung', $attributes['gruppen_namen'])) {
            return false;
         }
         return true;
@@ -80,6 +80,9 @@ class Juhw extends Generic implements Contract
         }
         if(in_array('Motorradstaffel', $groups)) {
             $return[] = 'Motorradstaffel';
+        }
+        if(in_array('Fachberater Drohne', $groups)) {
+            $return[] = 'FB Drohne';
         }
         return $return;
     }
