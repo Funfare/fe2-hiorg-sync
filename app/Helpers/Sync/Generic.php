@@ -5,7 +5,10 @@ namespace App\Helpers\Sync;
 class Generic
 {
 
-    function getPhoneNumber($record) {
+    public function isValid($record) {
+        return true;
+    }
+    public function getPhoneNumber($record) {
         if(!empty($record['handy'])) {
             $phone =  $record['handy'];
         } elseif(!empty($record['telpriv'])) {
@@ -26,7 +29,7 @@ class Generic
         return $phone;
     }
 
-    function getGroups(\Illuminate\Support\Collection $record) {
+    function getGroups($record) {
 
         return $record['gruppen_namen'];
     }

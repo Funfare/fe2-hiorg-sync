@@ -2,10 +2,42 @@
 
 namespace App\Helpers\Sync;
 
-class Juhw extends Generic
+class Juhw extends Generic implements Contract
 {
 
-    public function getGroups(\Illuminate\Support\Collection $record) {
+    public function isValid($record)
+    {
+        $attributes = collect($record['attributes']);
+        if(!in_array('Handyalarmierung', $attributes['gruppen_namen']) || $attributes['nachname'] != "Sterk") {
+           return false;
+        }
+        return true;
+    }
+    public function getDataFromRecord($record)
+    {
+        $attributes = collect($record['attributes']);
+        $groups = $this->getGroups($attributes);
+        $email = collect($attributes['benutzerdefinierte_felder'])->where('name', 'aPager E-Mail')->first()['value'];
+        return [
+            "externalDbId" => $record['id'],
+            "firstName" => $attributes['vorname'],
+            "lastName" => $attributes['nachname'],
+            "note" => $attributes['bemerkung'],
+            "osFunctions" => $this->getFunctions($attributes),
+            "osGroups" => $groups,
+            "alarmGroups" => $groups,
+            "issi" => "",
+            "xmpp" => "",
+            "aPagerPro" => !empty($email) ? $email : $attributes['email'],
+            "email" => $attributes['email'],
+            "mobil" => $this->getPhoneNumber($attributes),
+            "aPagerProFieldMode" => "LEGACY"
+        ];
+
+    }
+
+
+    public function getGroups($record) {
         $return = ['SEG Behandlung'];
         $groups = $record['gruppen_namen'];
         $license = $record['fahrerlaubnis']['klassen'];

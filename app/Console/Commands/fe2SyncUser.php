@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Helpers\Sync\Factory;
 use App\Helpers\Sync\Generic;
 use App\Models\Organization;
 use App\Models\Sync;
@@ -49,36 +50,17 @@ class fe2SyncUser extends Command
             ]);
             $data = json_decode($response->getBody()->getContents(), JSON_OBJECT_AS_ARRAY);
 
-            $helper =  new (class_exists('App\\Helpers\\Sync\\'.ucfirst($org->key)) ? 'App\\Helpers\\Sync\\'.ucfirst($org->key) : Generic::class);
-
+            $helper =  Factory::make($org);
             $sync = [
                 'source' => 'JUH WÜ FE2 Sync',
                 'personList' => [],
             ];
 
             foreach ($data['data'] as $record) {
-                $attributes = collect($record['attributes']);
-
-                $groups = $helper->getGroups($attributes);
-                if(!in_array('Handyalarmierung', $attributes['gruppen_namen']) || $attributes['nachname'] != "Sterk") {
+                if(!$helper->isValid($record)) {
                     continue;
                 }
-                $email = collect($attributes['benutzerdefinierte_felder'])->where('name', 'aPager E-Mail')->first()['value'];
-                $sync['personList'][] = [
-                    "externalDbId" => $record['id'],
-                    "firstName" => $attributes['vorname'],
-                    "lastName" => $attributes['nachname'],
-                    "note" => $attributes['bemerkung'],
-                    "osFunctions" => $helper->getFunctions($attributes),
-                    "osGroups" => $groups,
-                    "alarmGroups" => $groups,
-                    "issi" => "",
-                    "xmpp" => "",
-                    "aPagerPro" => !empty($email) ? $email : $attributes['email'],
-                    "email" => $attributes['email'],
-                    "mobil" => $helper->getPhoneNumber($attributes),
-                    "aPagerProFieldMode" => "LEGACY"
-                ];
+                $sync['personList'][] = $helper->getDataFromRecord($record);
             }
             $res = $client->post($org->fe2_link.'rest/addressbook/sync', [
                 'json' => $sync,

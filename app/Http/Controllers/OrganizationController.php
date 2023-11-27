@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\Sync\Factory;
+use App\Helpers\Sync\Generic;
 use App\Models\Organization;
+use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use League\OAuth2\Client\Provider\GenericProvider;
 
@@ -12,6 +15,34 @@ class OrganizationController extends Controller
     {
         $org = \Auth::user()->organization;
         return view('organizations.show', compact('org'));
+    }
+
+    public function me(GenericProvider $provider, Client $client)
+    {
+        $user = \Auth::user();
+        $data = \Cache::remember('hiorg-self-user-' . $user->id, now()->addHour(), function () use ($provider, $client, $user) {
+            $accessToken = new \League\OAuth2\Client\Token\AccessToken($user->hiorg_token);
+            if ($accessToken->hasExpired()) {
+                $accessToken = $provider->getAccessToken('refresh_token', [
+                    'refresh_token' => $accessToken->getRefreshToken()
+                ]);
+                $user->hiorg_token = $accessToken->jsonSerialize();
+                $user->save();
+            }
+
+            $response = $client->get('https://api.hiorg-server.de/core/v1/personal/selbst', [
+                'headers' => [
+                    'Authorization' => $accessToken->getToken()
+                ]
+            ]);
+            return json_decode($response->getBody()->getContents(), JSON_OBJECT_AS_ARRAY);
+        });
+        $record = $data['data'];
+        $helper = Factory::make($user->organization);
+        $valid = $helper->isValid($record);
+        $fe2 = $helper->getDataFromRecord($record);
+
+        return view('organizations.me', compact('valid', 'fe2'));
     }
 
     public function edit()
