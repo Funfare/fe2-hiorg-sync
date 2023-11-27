@@ -16,7 +16,7 @@ stages:
 build:
   stage: build
   script:
-    - docker build -t $CI_CUSTOM_REGISTRY/hiorg-fe2/app:latest-dev .
+    - docker build --cache-from $CI_CUSTOM_REGISTRY/hiorg-fe2/app:latest-dev -t $CI_CUSTOM_REGISTRY/hiorg-fe2/app:latest-dev .
     - docker push $CI_CUSTOM_REGISTRY/hiorg-fe2/app:latest-dev
 deploy-dev:
   stage: deploy
@@ -31,4 +31,4 @@ deploy-dev:
     - ssh-add "$SSH_DEV_PRIVATE_KEY"
     - mkdir -p ~/.ssh
     - chmod 700 ~/.ssh
-    - ssh root@iuk-wuerzburg.de "cd /var/docker/sync/ && docker compose pull web && docker compose up -d"
+    - ssh -o StrictHostKeyChecking=no root@iuk-wuerzburg.de "cd /var/docker/sync/ && docker compose pull web && docker compose up -d"
