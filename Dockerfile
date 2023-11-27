@@ -10,7 +10,7 @@ RUN apt-get update
 #install some basic tools
 RUN apt-get install -y \
         git \
-        libzip \
+        libzip-dev \
         zlib1g-dev \
         zip \
   && docker-php-ext-install zip
