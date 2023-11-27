@@ -21,7 +21,6 @@ return new class extends Migration
             $table->string('fe2_sync_token')->nullable();
             $table->string('fe2_provisioning_user')->nullable();
             $table->string('fe2_provisioning_leader')->nullable();
-            $table->string('hiorg_token')->nullable();
             $table->timestamps();
         });
     }

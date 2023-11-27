@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Organization;
 use Illuminate\Http\Request;
+use League\OAuth2\Client\Provider\GenericProvider;
 
 class OrganizationController extends Controller
 {
@@ -33,4 +34,12 @@ class OrganizationController extends Controller
         $org->update($data);
         return redirect()->route('settings')->with('message', 'Daten gespeichert');
     }
+
+    public function setAdmin(GenericProvider $provider)
+    {
+        session()->put('setAdminUser', true);
+        $url = $provider->getAuthorizationUrl(['scope' => 'openid personal:read']);
+        return redirect($url);
+    }
+
 }

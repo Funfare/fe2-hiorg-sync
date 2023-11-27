@@ -28,6 +28,16 @@ class AuthController extends Controller
                 'code' => $request->get('code')
             ]);
             $hiorgUser = $provider->getResourceOwner($accessToken)->toArray();
+            if(session('setAdminUser') === true) {
+                $org = Organization::where('key', $hiorgUser['organisation_key'])->first();
+
+                $org->hiorg_user = $hiorgUser['name'];
+                $org->hiorg_token = $accessToken->jsonSerialize();
+                $org->save();
+                session()->put('setAdminUser', false);
+                return redirect()->route('settings');
+            }
+
             $org = Organization::updateOrCreate(['key' => $hiorgUser['organisation_key']], ['name' => $hiorgUser['organisation']]);
             $user = User::updateOrCreate(['key' => $hiorgUser['sub']], [
                 'name' => $hiorgUser['name'],

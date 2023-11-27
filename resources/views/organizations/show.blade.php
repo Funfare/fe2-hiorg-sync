@@ -16,7 +16,35 @@
     </p>
     @if(Auth::user()->is_admin)
     <h3>Letzte Synchronisationen</h3>
-
-
+    <table class="table table-striped">
+        <tr>
+        <th>Datum</th>
+        <th>Typ</th>
+        <th>Anzahl</th>
+            <th></th>
+        </tr>
+        @forelse($org->syncs as $sync)
+            <tr>
+                <td>
+                    {{ $sync->created_at->format('d.m.Y H:i') }}
+                </td>
+                <td>
+                    {{ $sync->type == 'sync' ? 'Personal synchronisiert' : 'Provisionierung aktualisiert' }}
+                </td>
+                <td>
+                    @if($sync->type == 'sync')
+                        {{ count($sync->data['personList']) }} Personen synchronisiert
+                    @endif
+                </td>
+                <td>
+                    <a href="{{ route('sync', $sync) }}">Details</a>
+                </td>
+            </tr>
+        @empty
+            <tr>
+                <td colspan="4">Noch keine Synchronisatino durchgeführt</td>
+            </tr>
+        @endforelse
+    </table>
     @endif
 @endsection

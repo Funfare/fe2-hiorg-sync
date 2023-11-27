@@ -39,5 +39,13 @@ class Organization extends Model
 {
     use HasFactory;
 
+    protected $casts = [
+        'hiorg_token' => 'json'
+    ];
     protected $guarded = [];
+
+    public function syncs()
+    {
+        return $this->hasMany(Sync::class);
+    }
 }

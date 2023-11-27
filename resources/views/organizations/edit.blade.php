@@ -8,7 +8,7 @@
 
 <form class="form" method="POST">
      {{ csrf_field() }}
-     
+
 
 
 
@@ -22,5 +22,15 @@
 <x-input id="fe2_provisioning_leader" value="{{old('fe2_provisioning_leader', $org->fe2_provisioning_leader)}}" name="fe2_provisioning_leader">ID Provisionierung FÜhrung</x-input>
 <button type="submit">Speichern</button>
 </form>
+
+    <h3>Hiorg Admin User</h3>
+    <p>
+        @if($org->hiorg_user)
+            Name: {{ $org->hiorg_user }}
+        @else
+            Admin noch nicht gesetzt
+        @endif
+        <a href="{{route('settings.setAdmin')}}" class="btn btn-primary">Neuen Administrator festlegen</a>
+    </p>
 
 @endsection
