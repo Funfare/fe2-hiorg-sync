@@ -20,9 +20,15 @@ build:
     - docker push $CI_CUSTOM_REGISTRY/hiorg-fe2/app:latest-dev
 deploy-dev:
   stage: deploy
-  image: junte/ssh-agent
+  #image: junte/ssh-agent
   variables:
     # should be set up at Gitlab CI env vars
     SSH_PRIVATE_KEY: $SSH_DEV_PRIVATE_KEY
   script:
+    - 'command -v ssh-agent >/dev/null || ( apt-get update -y && apt-get install openssh-client -y )'
+    - eval $(ssh-agent -s)
+    - chmod 400 "$SSH_DEV_PRIVATE_KEY"
+    - ssh-add "$SSH_DEV_PRIVATE_KEY"
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
     - ssh root@iuk-wuerzburg.de "cd /var/docker/sync/ && docker compose pull web && docker compose up -d"
