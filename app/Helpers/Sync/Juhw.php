@@ -95,7 +95,7 @@ class Juhw extends Generic implements Contract
         $med = $qualis->get('Medizinische Qualifikation');
         $tactic = $qualis->get('Führungsqualifikation');
         $return = [$med];
-        if(!in_array($tactic, ['H', 'G1'])) {
+        if(!in_array($tactic, ['H', 'HGA'])) {
             $return[] = $tactic;
         };
 
