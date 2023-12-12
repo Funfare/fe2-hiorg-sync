@@ -22,6 +22,13 @@
     <a href="{{ route('me.prov') }}">Um eine neue Provisionierung (Aktivierungsmail) zu erhalten, klicke bitte hier</a>
     @endenv--}}
     </p>
+    <h4>Probealarm (ab 02.02.2024)</h4>
+    <p>
+    Ab dem 02.02.2024 kannst du direkt hier einen Probealarm für dein Handy auslösen.
+    {{--@env('local')
+    <a href="{{ route('me.prov') }}">Um eine neue Provisionierung (Aktivierungsmail) zu erhalten, klicke bitte hier</a>
+    @endenv--}}
+    </p>
     @can('admin')
     <h3>Letzte Synchronisationen</h3>
     <table class="table table-striped">
