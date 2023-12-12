@@ -19,6 +19,11 @@ class AuthController extends Controller
         return redirect($url);
     }
 
+
+    public function login()
+    {
+        return view('login');
+    }
     public function auth(GenericProvider $provider, Request $request)
     {
         try {
