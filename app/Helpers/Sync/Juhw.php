@@ -43,7 +43,7 @@ class Juhw extends Generic implements Contract
     public function getGroups($record) {
         $return = ['SEG Behandlung'];
         $groups = $record['gruppen_namen'];
-        $license = $record['fahrerlaubnis']['klassen'];
+        $license = $record['fahrerlaubnis']['klassen'] ?? [];
         $qualis = (new \Illuminate\Support\Collection($record['qualifikationen']))->pluck('name_kurz', 'liste');
         $med = $qualis->get('Medizinische Qualifikation');
         $tactic = $qualis->get('Führungsqualifikation');
