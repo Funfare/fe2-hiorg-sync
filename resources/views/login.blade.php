@@ -33,9 +33,19 @@
 
 <main class="container">
     <div class="bg-light p-5 rounded">
-       <h2>Hiorg - aPager Synchronisation</h2>
+       <h2>HiOrg - aPager Synchronisation - Selfservice Portal</h2>
 
-        <a href="{{ route('redirect') }}">Bitte melde dich an (Weiterleitung zum Hiorg-Server)</a>
+        <p>
+            Dieses Selfservice Portal dient dazu, deine Provisionierung von aPager direkt per E-Mail anzufordern, sowie deine Daten aus HiOrg mit aPager zu synchronisieren.
+            Bitte logge dich mit deinem HiOrg Account ein, um den Selfservice zu starten.
+        </p>
+
+
+
+        <a href="{{ route('redirect') }}" class="btn btn-outline-dark login-hiorg-btn">
+            <img src="{{ Vite::asset('resources/images/hiorg_login.png') }}" width="250">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-login-2" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 8v-2a2 2 0 0 1 2 -2h7a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-7a2 2 0 0 1 -2 -2v-2" /><path d="M3 12h13l-3 -3" /><path d="M13 15l3 -3" /></svg>
+        </a>
     </div>
 </main>
 

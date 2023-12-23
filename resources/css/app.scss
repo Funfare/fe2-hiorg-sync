@@ -1,1 +1,10 @@
 @import 'bootstrap/scss/bootstrap.scss';
+
+
+.login-hiorg-btn {
+    &:hover {
+        img {
+            filter: invert(1);
+        }
+    }
+}
