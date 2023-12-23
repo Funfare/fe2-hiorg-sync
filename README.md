@@ -1,4 +1,4 @@
-<p align="center"><img src="./resources/images/juh_logo.svg" width="300" alt="Laravel Logo"></p>
+<p align="center"><img src="./resources/images/juh_logo.svg" width="300" alt="JUH Logo"></p>
 
 ## 📖  About FE2 - HiOrg Synchronisation
 
