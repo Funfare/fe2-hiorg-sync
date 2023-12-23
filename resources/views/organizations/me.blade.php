@@ -1,9 +1,6 @@
 @extends('layouts.master')
 
 @section('content')
-    <div class="d-inline">
-
-    </div>
     <h2>{{ Auth::user()->organization->name }}</h2>
 
     @if(!$valid)
