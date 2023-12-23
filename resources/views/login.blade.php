@@ -17,16 +17,10 @@
 <nav class="navbar navbar-expand-md navbar-dark bg-dark mb-4">
     <div class="container-fluid">
         <a class="navbar-brand" href="#">FE2-Hiorg Sync</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarCollapse">
-            <ul class="navbar-nav me-auto mb-2 mb-md-0">
-
-            </ul>
-            <div class="d-flex">
-                <a href="{{ route('redirect') }}" class="btn btn-outline-secondary">Login</a>
-            </div>
+        <div class="custom-icons-header">
+            <img src="{{ Vite::asset('resources/images/custom_icons/apager-pro.svg') }}" class="me-3" width="50">
+            <img src="{{ Vite::asset('resources/images/custom_icons/juh.svg') }}" class="me-3" width="50">
+            <img src="{{ Vite::asset('resources/images/custom_icons/hiorg-server.svg') }}" width="50">
         </div>
     </div>
 </nav>
@@ -44,7 +38,7 @@
 
         <a href="{{ route('redirect') }}" class="btn btn-outline-dark login-hiorg-btn">
             <img src="{{ Vite::asset('resources/images/hiorg_login.png') }}" width="250">
-            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-login-2" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 8v-2a2 2 0 0 1 2 -2h7a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-7a2 2 0 0 1 -2 -2v-2" /><path d="M3 12h13l-3 -3" /><path d="M13 15l3 -3" /></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 8v-2a2 2 0 0 1 2 -2h7a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-7a2 2 0 0 1 -2 -2v-2" /><path d="M3 12h13l-3 -3" /><path d="M13 15l3 -3" /></svg>
         </a>
     </div>
 </main>

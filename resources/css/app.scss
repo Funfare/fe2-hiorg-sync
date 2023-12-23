@@ -1,5 +1,13 @@
 @import 'bootstrap/scss/bootstrap.scss';
 
+.navbar {
+    .custom-icons-header{
+        img {
+            filter: invert(1);
+        }
+    }
+}
+
 
 .login-hiorg-btn {
     &:hover {
