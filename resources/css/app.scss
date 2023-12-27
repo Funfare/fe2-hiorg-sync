@@ -1,0 +1,38 @@
+@import 'bootstrap/scss/bootstrap.scss';
+
+@import "@fontsource/maven-pro";
+
+body {
+    font-family: "Maven Pro", sans-serif;
+
+    h1 {
+        font-weight: 800;
+    }
+
+    h2 {
+        font-weight: 600;
+    }
+
+    .navbar {
+        .custom-icons-header{
+            img {
+                filter: invert(1);
+            }
+        }
+    }
+
+    main {
+        .login-hiorg-btn {
+            &:hover {
+                img {
+                    filter: invert(1);
+                }
+            }
+        }
+    }
+}
+
+
+
+
+
