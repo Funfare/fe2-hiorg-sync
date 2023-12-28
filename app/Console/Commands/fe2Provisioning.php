@@ -38,6 +38,12 @@ class fe2Provisioning extends Command
                 ]
             ]);
             $token = json_decode($login->getBody()->getContents())->token;
+            $userInfoRequest = $client->get($org->fe2_link.'/rest/addressbook/paginated/simple?page=0&filter=&ordering=ASC&limit=5000', [
+                'headers' => [
+                    'Authorization' => 'JWT '.$token
+                ]
+            ]);
+            $userInfo = collect(json_decode($userInfoRequest->getBody()->getContents())->persons);
             $userRequest = $client->get($org->fe2_link.'/rest/addressbook/paginated/assignProvisionings/simple?page=0&ordering=ASC&limit=10000&field=aPagerPro&filterShared=true', [
                 'headers' => [
                     'Authorization' => 'JWT '.$token
@@ -46,7 +52,8 @@ class fe2Provisioning extends Command
             $users = json_decode($userRequest->getBody()->getContents());
             $assignedProvision = [];
             foreach ($users->content as $user) {
-                $provId = $org->fe2_provisioning_user;
+                $info = $userInfo->where('personID', $user->id)->first();
+                $provId = in_array('Führung', $info->groups ?? []) ? $org->fe2_provisioning_leader : $org->fe2_provisioning_user;
                 $update = false;
                 if(empty($user->apagerPersonData) || $user->apagerPersonData->version == 0) {
                     $update = true;

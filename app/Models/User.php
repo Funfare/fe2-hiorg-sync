@@ -74,6 +74,7 @@ class User extends Authenticatable
      */
     protected $casts = [
         'hiorg_token' => 'json',
-        'is_admin' => 'bool'
+        'is_admin' => 'bool',
+        'last_action_at' => 'datetime'
     ];
 }

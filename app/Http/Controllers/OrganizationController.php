@@ -75,9 +75,26 @@ class OrganizationController extends Controller
         return redirect($url);
     }
 
-    public function provisioning()
+    public function provisioning(Client $client)
     {
-
+        $org = \Auth::user()->organization;
+        $login = $client->post($org->fe2_link.'/rest/login', [
+            'json' => [
+                'username' => $org->fe2_user,
+                'password' => $org->fe2_pass,
+                'source' => "WEB"
+            ]
+        ]);
+        $token = json_decode($login->getBody()->getContents())->token;
+        $userInfoRequest = $client->get($org->fe2_link.'/rest/addressbook/paginated/simple?page=0&filter=&ordering=ASC&limit=5000', [
+            'headers' => [
+                'Authorization' => 'JWT '.$token
+            ]
+        ]);
+        $userInfo = collect(json_decode($userInfoRequest->getBody()->getContents())->persons);
+        $users = json_decode($userRequest->getBody()->getContents());
+        $info = $userInfo->where('aPagerPro', $user->id)->first();
+        $provId = in_array('Führung', $info->groups ?? []) ? $org->fe2_provisioning_leader : $org->fe2_provisioning_user;
     }
 
 }

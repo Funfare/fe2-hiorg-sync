@@ -48,4 +48,9 @@ class Organization extends Model
     {
         return $this->hasMany(Sync::class);
     }
+
+    public function users()
+    {
+        return $this->hasMany(User::class);
+    }
 }

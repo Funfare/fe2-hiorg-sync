@@ -6,7 +6,12 @@ use Illuminate\Support\ServiceProvider;
 return [
 
     'admins' => [
-        'Nicholas Sterk'
+        'juhw' => [
+            'juh@nicholas-sterk.de',
+            'susi_kolb@yahoo.de',
+            'kontakt@fabio-thoma.de'
+        ]
+
     ],
 
     /*
@@ -188,5 +193,6 @@ return [
     'aliases' => Facade::defaultAliases()->merge([
         // 'Example' => App\Facades\Example::class,
     ])->toArray(),
+
 
 ];
