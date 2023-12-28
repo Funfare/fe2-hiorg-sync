@@ -13,6 +13,16 @@ stages:
   - build
   - deploy
 
+build-branch:
+  stage: build
+  except:
+    - tags
+    - main
+    - merge_requests
+  script:
+    - docker build --cache-from $CI_CUSTOM_REGISTRY/hiorg-fe2/app:latest-dev -t $CI_CUSTOM_REGISTRY/hiorg-fe2/app:$CI_COMMIT_BRANCH .
+    - docker push $CI_CUSTOM_REGISTRY/hiorg-fe2/app:$CI_COMMIT_BRANCH
+
 build-dev:
   stage: build
   only:
