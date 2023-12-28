@@ -13,7 +13,8 @@ class TrustProxies extends Middleware
      * @var array<int, string>|string|null
      */
     protected $proxies =  [
-        '172.16.0.0/12', // Docker IP range for sail network
+        '172.16.0.0/12',
+        '10.0.0.0/8'
     ];
 
     /**
