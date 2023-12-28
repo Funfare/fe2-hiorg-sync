@@ -61,6 +61,11 @@
 
 <main class="container">
     <div class="bg-light p-5 rounded">
+        @if(session('message'))
+            <div class="alert alert-success">
+                {{ session('message') }}
+            </div>
+        @endif
         @yield('content')
     </div>
 </main>

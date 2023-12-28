@@ -23,6 +23,7 @@ Route::middleware('auth')->group(function() {
 
     Route::get('/me', [\App\Http\Controllers\OrganizationController::class, 'me'])->name('me');
     Route::get('/me/provisioning', [\App\Http\Controllers\OrganizationController::class, 'provisioning'])->name('me.prov');
+    Route::get('/me/alarm/{type}', [\App\Http\Controllers\OrganizationController::class, 'alarm'])->name('me.alarm');
 
     Route::middleware('can:admin')->group(function() {
         Route::get('/sync/{sync}', [\App\Http\Controllers\SyncController::class, 'show'])->name('sync');
