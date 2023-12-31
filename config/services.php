@@ -17,7 +17,7 @@ return [
     'hiorg' => [
         'clientId' => 'juhw_fe2_sync',    // The client ID assigned to you by the provider
         'clientSecret' => env('HIORG_OAUTH_CLIENT_SECRET'),    // The client password assigned to you by the provider
-        'redirectUri' => 'https://sync.iuk-wuerzburg.de/auth.php',
+        'redirectUri' => env('HIORG_OAUTH_REDIRECT_URI', 'https://sync.iuk-wuerzburg.de/auth.php'),
         'urlAuthorize' => 'https://api.hiorg-server.de/oauth/v1/authorize',
         'urlAccessToken' => 'https://api.hiorg-server.de/oauth/v1/token',
         'urlResourceOwnerDetails' => 'https://api.hiorg-server.de/oauth/v1/userinfo'

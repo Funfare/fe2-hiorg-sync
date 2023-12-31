@@ -18,16 +18,17 @@
     <h4>Provisionierung (ab 02.02.2024)</h4>
     <p>
     Ab dem 02.02.2024 kannst du direkt hier eine neue Aktivierungsmail anfordern, solltest du ein neues Handy haben oder die Konfiguration erneut benötigen.
-    {{--@env('local')
+    @env('local')
     <a href="{{ route('me.prov') }}">Um eine neue Provisionierung (Aktivierungsmail) zu erhalten, klicke bitte hier</a>
-    @endenv--}}
+    @endenv
     </p>
     <h4>Probealarm (ab 02.02.2024)</h4>
     <p>
     Ab dem 02.02.2024 kannst du direkt hier einen Probealarm für dein Handy auslösen.
-    {{--@env('local')
-    <a href="{{ route('me.prov') }}">Um eine neue Provisionierung (Aktivierungsmail) zu erhalten, klicke bitte hier</a>
-    @endenv--}}
+    @env('local')
+    <a href="{{ route('me.alarm', 'alarm') }}">Lauter Alarm</a> <br />
+    <a href="{{ route('me.alarm', 'info') }}">Info Alarm</a> <br />
+    @endenv
     </p>
     @can('admin')
     <h3>Letzte Synchronisationen</h3>

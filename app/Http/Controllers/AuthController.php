@@ -47,7 +47,7 @@ class AuthController extends Controller
             $user = User::updateOrCreate(['key' => $hiorgUser['sub']], [
                 'name' => $hiorgUser['name'],
                 'email' => $hiorgUser['email'],
-                'is_admin' => in_array($hiorgUser['name'], config('app.admins')),
+                'is_admin' => in_array($hiorgUser['email'], config('app.admins.'.$org->key)),
                 'hiorg_token' => $accessToken->jsonSerialize(),
                 'organization_id' => $org->id
             ]);
