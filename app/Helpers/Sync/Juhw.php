@@ -109,6 +109,6 @@ class Juhw extends Generic implements Contract
         if(in_array('Motorradstaffel', $groups)) {
             $return[] = 'Motorradstaffel';
         }
-        return array_unique($return);
+        return array_values(array_unique(array_filter($return)));
     }
 }
