@@ -2,6 +2,8 @@
 
 namespace App\Helpers\Sync;
 
+use Illuminate\Support\Str;
+
 class Juhw extends Generic implements Contract
 {
 
@@ -18,9 +20,10 @@ class Juhw extends Generic implements Contract
         $attributes = collect($record['attributes']);
         $groups = $this->getGroups($attributes);
         $email = collect($attributes['benutzerdefinierte_felder'])->where('name', 'aPager E-Mail')->first()['value'];
-        if(!app()->environment('production')) {
-            $email = 'fe2-test-'.$record['id'].'@re-gister.com';
-        }
+//        if(!app()->environment('production')) {
+//            $email = 'fe2-test-'.$record['id'].'@re-gister.com';
+//        }
+        $aPager = !empty($email) ? $email : $attributes['email'];
         return [
             "externalDbId" => $record['id'],
             "firstName" => $attributes['vorname'],
@@ -31,10 +34,10 @@ class Juhw extends Generic implements Contract
             "alarmGroups" => $groups,
             "issi" => "",
             "xmpp" => "",
-            "aPagerPro" => !empty($email) ? $email : $attributes['email'],
+            "aPagerPro" => $aPager,
             "email" => $attributes['email'],
             "mobil" => $this->getPhoneNumber($attributes),
-            "aPagerProFieldMode" => "LEGACY"
+            "aPagerProFieldMode" => Str::contains($aPager, '@') ? "LEGACY" : 'TOKEN'
         ];
 
     }
@@ -68,6 +71,12 @@ class Juhw extends Generic implements Contract
             'ORGL',
         ])) {
             $return[] = 'Führung';
+        }
+        if(in_array($tactic, [
+            'ELRD',
+            'ORGL',
+        ])) {
+            $return[] = 'SanEL';
         }
         if(in_array('SEG IuK', $groups)) {
             $return[] = 'SEG IuK';
