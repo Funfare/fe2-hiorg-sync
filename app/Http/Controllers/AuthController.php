@@ -72,7 +72,18 @@ class AuthController extends Controller
 
     public function loginAsUser(User $user)
     {
+        abort_unless(Auth::user()->is_admin && Auth::user()->organization_id === $user->organization_id, 403);
+        \Session::put('impersonate_admin', Auth::user()->id);
         Auth::loginUsingId($user->id);
+        return redirect()->route('home');
+    }
+
+    public function loginBack()
+    {
+        $user =  \Session::get('impersonate_admin');
+        abort_if($user === null, 403);
+        \Session::put('impersonate_admin', null);
+        Auth::loginUsingId($user);
         return redirect()->route('home');
     }
 }

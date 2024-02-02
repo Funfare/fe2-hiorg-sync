@@ -32,8 +32,10 @@ Route::middleware('auth')->group(function() {
         Route::get('/settings', [\App\Http\Controllers\OrganizationController::class, 'edit'])->name('settings');
         Route::get('/users', [\App\Http\Controllers\UserController::class, 'index'])->name('users');
         Route::get('/users/{user}', [\App\Http\Controllers\UserController::class, 'show'])->name('users.show');
+        Route::get('login/user/{user}', [\App\Http\Controllers\AuthController::class, 'loginAsUser'])->name('impersonate.user');
+
     });
+    Route::get('/login/back', [\App\Http\Controllers\AuthController::class, 'loginBack'])->name('impersonate.back');
 
 });
 
-Route::get('login/user/{user}', [\App\Http\Controllers\AuthController::class, 'loginAsUser']);
