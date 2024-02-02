@@ -14,11 +14,16 @@ use League\OAuth2\Client\Token\AccessToken;
 
 class OrganizationController extends Controller
 {
-    public function home(GenericProvider $provider)
+    public function home(Client $client, GenericProvider $provider)
     {
-        $org = \Auth::user()->organization;
+        $user = \Auth::user();
+        $org = $user->organization;
+        $data = $this->getHiorgData($user, $provider, $client);
+        $record = $data['data'];
+        $helper = Factory::make($user->organization);
+        $valid = $helper->isValid($record);
         $syncs = $org->syncs()->latest()->paginate(20);
-        return view('organizations.show', compact('org', 'syncs'));
+        return view('organizations.show', compact('org', 'syncs', 'valid'));
     }
 
     public function me(GenericProvider $provider, Client $client)
