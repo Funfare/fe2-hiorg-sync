@@ -68,13 +68,13 @@ class Juhw extends Generic implements Contract
             'ZF',
             'VF',
             'ELRD',
-            'ORGL',
+            'OrgL',
         ])) {
             $return[] = 'Führung';
         }
         if(in_array($tactic, [
             'ELRD',
-            'ORGL',
+            'OrgL',
         ])) {
             $return[] = 'SanEL';
         }
