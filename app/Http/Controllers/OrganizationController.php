@@ -132,7 +132,16 @@ class OrganizationController extends Controller
 
             ]
         ]);
-
+        $assignedProvision[] = [
+            'name' => $user->name,
+            'reason' => 'user_request',
+            'alarm' => $type
+        ];
+        Sync::create([
+            'organization_id' => $org->id,
+            'type' => 'alarm',
+            'data' => $assignedProvision,
+        ]);
         return redirect()->route('home')->with('message', 'Testalarm wurde ausgelöst');
     }
 
