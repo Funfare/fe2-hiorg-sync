@@ -60,6 +60,8 @@
                         {{ count($sync->data['personList']) }} Personen synchronisiert
                     @elseif($sync->type == 'prov')
                         {{ count($sync->data) }} Provisionierungen aktualisiert
+                    @elseif($sync->type == 'alarm')
+                        {{ count($sync->data) }} Alarm ausgelöst
                     @endif
                 </td>
                 <td>
