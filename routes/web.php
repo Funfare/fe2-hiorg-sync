@@ -25,6 +25,8 @@ Route::middleware('auth')->group(function() {
     Route::get('/me/provisioning', [\App\Http\Controllers\OrganizationController::class, 'provisioning'])->name('me.prov');
     Route::get('/me/alarm/{type}', [\App\Http\Controllers\OrganizationController::class, 'alarm'])->name('me.alarm');
 
+    Route::get('/faq', [\App\Http\Controllers\OrganizationController::class, 'faq'])->name('faq');
+
     Route::middleware('can:admin')->group(function() {
         Route::get('/sync/{sync}', [\App\Http\Controllers\SyncController::class, 'show'])->name('sync');
         Route::post('/settings', [\App\Http\Controllers\OrganizationController::class, 'update']);
