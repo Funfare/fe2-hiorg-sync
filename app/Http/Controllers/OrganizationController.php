@@ -38,15 +38,9 @@ class OrganizationController extends Controller
         return view('organizations.me', compact('valid', 'fe2'));
     }
 
-    public function faq(GenericProvider $provider, Client $client)
+    public function faq()
     {
-        $user = \Auth::user();
-        $data = $this->getHiorgData($user, $provider, $client);
-        $record = $data['data'];
-        $helper = Factory::make($user->organization);
-        $valid = $helper->isValid($record);
-
-        return view('organizations.faq', compact('valid'));
+        return view('organizations.faq');
     }
 
     public function edit()
