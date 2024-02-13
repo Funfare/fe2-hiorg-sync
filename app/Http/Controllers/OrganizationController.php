@@ -38,7 +38,7 @@ class OrganizationController extends Controller
         return view('organizations.me', compact('valid', 'fe2'));
     }
 
-    public function faq()
+    public function faq(GenericProvider $provider, Client $client)
     {
         $user = \Auth::user();
         $data = $this->getHiorgData($user, $provider, $client);
