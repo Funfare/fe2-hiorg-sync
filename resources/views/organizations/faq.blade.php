@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
 @section('content')
-
+    <h2>{{ Auth::user()->organization->name }}</h2>
 
     <h4 class="mt-3">Ich sehe hier keine synchronisierten Daten</h4>
     <div class="accordion" id="faqAccordion1">
