@@ -96,6 +96,9 @@ class Juhw extends Generic implements Contract
         if(in_array('Fachberater Drohne', $groups)) {
             $return[] = 'FB Drohne';
         }
+        if(in_array('HVO Arnstein', $groups)) {
+            $return[] = 'HVO Arnstein';
+        }
         return $return;
     }
 
