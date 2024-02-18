@@ -53,4 +53,14 @@ class Organization extends Model
     {
         return $this->hasMany(User::class);
     }
+
+    public function ruleSets()
+    {
+        return $this->hasMany(RuleSet::class);
+    }
+
+    public function rules()
+    {
+        return $this->hasManyThrough(Rule::class, RuleSet::class);
+    }
 }

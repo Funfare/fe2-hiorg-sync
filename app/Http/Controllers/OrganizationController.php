@@ -30,6 +30,7 @@ class OrganizationController extends Controller
     {
         $user = \Auth::user();
         $data = $this->getHiorgData($user, $provider, $client);
+        dd($data);
         $record = $data['data'];
         $helper = Factory::make($user->organization);
         $valid = $helper->isValid($record);

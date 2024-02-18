@@ -12,8 +12,12 @@ class Authenticate extends Middleware
     {
         $this->authenticate($request, $guards);
 
-        \Auth::user()->last_action_at = now();
-        \Auth::user()->save();
+        // Bei Impersonate kein action-date setzen
+        if(\Session::get('impersonate_admin') === null) {
+            \Auth::user()->last_action_at = now();
+            \Auth::user()->save();
+        }
+
         return $next($request);
     }
     /**
