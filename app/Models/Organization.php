@@ -63,4 +63,9 @@ class Organization extends Model
     {
         return $this->hasManyThrough(Rule::class, RuleSet::class);
     }
+
+    public function tabs()
+    {
+        return $this->hasMany(Tab::class);
+    }
 }

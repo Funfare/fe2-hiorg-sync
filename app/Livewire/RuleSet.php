@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Compares\IsEqual;
+use App\Models\SourceField;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
 use Livewire\Attributes\On;
@@ -26,6 +27,8 @@ class RuleSet extends Component
     public $destination_field_id;
     public $set_value_type;
 
+    public $source_field_extra_name;
+    public $needsSourceFieldExtraName = false;
     public function addRule()
     {
         $this->ruleSet->rules()->create([
@@ -44,6 +47,22 @@ class RuleSet extends Component
     {
         $this->ruleSet = $ruleSet;
         $this->fill($ruleSet);
+
+        if($ruleSet->set_value_type == 'field') {
+            $sourceField = SourceField::find($ruleSet->set_value);
+            $this->needsSourceFieldExtraName = $sourceField?->needs_extra_value ?? false;
+        }
+
+    }
+
+    public function updated($property)
+    {
+        // $property: The name of the current property that was updated
+
+        if ($property === 'set_value' && $this->set_value_type === 'field') {
+            $field = SourceField::find($this->set_value);
+            $this->needsSourceFieldExtraName = $field->needs_extra_value;
+        }
     }
 
     #[On('rules-save')]

@@ -5,12 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class SourceField extends Model
+class Tab extends Model
 {
-    public $timestamps = false;
     use HasFactory;
-
-    protected $casts = [
-        'needs_extra_value' => 'boolean',
-    ];
 }

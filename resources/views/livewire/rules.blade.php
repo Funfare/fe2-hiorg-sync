@@ -1,4 +1,14 @@
 <div>
+    <ul class="nav nav-tabs">
+        <li class="nav-item">
+            <a class="nav-link @if($tab == null) active @endif" aria-current="page" href="{{route('rules.show')}}">Unkategorisiert</a>
+        </li>
+        @foreach($org->tabs as $item)
+            <li class="nav-item">
+                <a class="nav-link @if($tab?->id == $item->id) active @endif" aria-current="page" href="{{route('rules.show', $item)}}">{{ $item->name }}</a>
+            </li>
+        @endforeach
+    </ul>
 
     <button class="btn btn-primary" wire:click="addRuleSet">Neue Regel</button>
     <button class="btn btn-primary" wire:click="addSpacer">Trennlinie hinzufügen</button>

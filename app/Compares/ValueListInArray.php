@@ -6,7 +6,7 @@ class ValueListInArray
 {
     public function valid($source, $value) {
         if(!is_array($source) && !$source instanceof \ArrayAccess) {
-            return false;
+            $source = [$source];
         }
         $valueList = explode(';', $value);
 

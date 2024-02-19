@@ -1,0 +1,3 @@
+INSERT INTO rules (id, rule_set_id, source_field_id, source_field_extra_name, compare_class, "not", compare_value, created_at, updated_at) VALUES (4, 4, 16, null, 'InArray', 1, 'Handyalarmierung', '2024-02-19 13:34:26', '2024-02-19 13:34:40');
+INSERT INTO rules (id, rule_set_id, source_field_id, source_field_extra_name, compare_class, "not", compare_value, created_at, updated_at) VALUES (5, 12, 32, 'aPager E-Mail', 'IsEmpty', 0, null, '2024-02-19 13:43:55', '2024-02-19 13:49:07');
+INSERT INTO rules (id, rule_set_id, source_field_id, source_field_extra_name, compare_class, "not", compare_value, created_at, updated_at) VALUES (6, 13, 32, 'aPager E-Mail', 'IsEmpty', 1, null, '2024-02-19 13:49:24', '2024-02-19 13:49:50');

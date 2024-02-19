@@ -90,6 +90,11 @@ return new class extends Migration
             'name' => 'Handynummer',
             'type' => 'string',
         ]);
+        \App\Models\DestinationField::forceCreate([
+            'key' => 'provisioning',
+            'name' => 'Provisionierung',
+            'type' => 'string',
+        ]);
 
         \App\Models\SourceField::forceCreate([
             'key' => 'attributes.anrede',
@@ -260,23 +265,29 @@ return new class extends Migration
         ]);
 
 
-
+        Schema::create('tabs', function (Blueprint $table) {
+            $table->id();
+            $table->foreignIdFor(\App\Models\Organization::class)->constrained()->cascadeOnDelete();
+            $table->string('name');
+        });
         Schema::create('rule_sets', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(\App\Models\Organization::class);
+            $table->foreignIdFor(\App\Models\Organization::class)->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(\App\Models\Tab::class)->nullable()->constrained()->cascadeOnDelete();
             $table->string('type'); // add/replace
             $table->string('operation')->default('and');
             $table->string('name');
             $table->integer('order');
             $table->string('set_value')->nullable();
             $table->string('set_value_type')->default('text'); //text,field,Qualifikation:Name,Qualifikation:nameKurz
+            $table->string('source_field_extra_name')->nullable();
             $table->foreignIdFor(\App\Models\DestinationField::class)->nullable();
             $table->timestamps();
         });
 
         Schema::create('rules', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(\App\Models\RuleSet::class);
+            $table->foreignIdFor(\App\Models\RuleSet::class)->constrained()->cascadeOnDelete();
             $table->foreignIdFor(\App\Models\SourceField::class)->nullable();
             $table->string('source_field_extra_name')->nullable();
             $table->string('compare_class');
@@ -295,5 +306,6 @@ return new class extends Migration
         Schema::dropIfExists('destination_fields');
         Schema::dropIfExists('rule_sets');
         Schema::dropIfExists('rules');
+        Schema::dropIfExists('tabs');
     }
 };

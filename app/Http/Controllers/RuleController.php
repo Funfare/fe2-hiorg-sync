@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\DestinationField;
 use App\Models\SourceField;
+use App\Models\Tab;
 use App\Models\User;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
@@ -11,11 +12,11 @@ use League\OAuth2\Client\Provider\GenericProvider;
 
 class RuleController extends Controller
 {
-    public function show()
+    public function show(Tab $tab = null)
     {
         $org = \Auth::user()->organization;
 
-        return view('organizations.rules.show', compact('org'));
+        return view('organizations.rules.show', compact('org', 'tab'));
     }
 
 
@@ -23,11 +24,13 @@ class RuleController extends Controller
     {
         $user = \Auth::user();
         $data = $this->getHiorgData($user, $provider, $client)['data'];
+        $data['attributes']['benutzerdefinierte_felder'][3]['value'] = 'abweichend@apager.de';
+        $data['attributes']['qualifikationen'][1]['name_kurz'] = 'IuK';
         $sourceFields = SourceField::all()->keyBy('id');
-        $fields = DestinationField::all()->pluck('key')->flip()->map(fn($i) => null)->toArray();
+        $fields = DestinationField::pluck('key')->flip()->map(fn($i) => null)->toArray();
         $org = $user->organization;
         $org->load([
-            'ruleSets' => fn($q) => $q->orderBy('order'),
+            'ruleSets' => fn($q) => $q->orderBy('order')->where('type', '!=', 'spacer'),
             'ruleSets.rules.sourceField',
             'ruleSets.destinationField',
         ]);
@@ -39,8 +42,24 @@ class RuleController extends Controller
             }
             foreach($ruleSet->rules as $rule) {
                 $class = "\\App\\Compares\\" . $rule->compare_class;
-                $comparer = new $class;
                 $source = \Arr::get($data, $rule->sourceField->key);
+                $comparer = new $class;
+                if($rule->sourceField->needs_extra_value) {
+                    if($rule->sourceField->key == 'attributes.qualifikationen') {
+                        $key = 'liste';
+                        $value = 'name_kurz';
+                    } elseif($rule->sourceField->key == 'attributes.benutzerdefinierte_felder') {
+                        $key = 'name';
+                        $value = 'value';
+                    } else {
+                        $key = 'name';
+                        $value = 'value';
+                    }
+                    $tmp = \Arr::first($source, function($item) use ($key, $value, $rule) {
+                        return \Arr::has($item, $key) && $item[$key] == $rule->source_field_extra_name;
+                    });
+                    $source = $tmp[$value];
+                }
                 $success = $comparer->valid($source, $rule->compare_value);
                 if($rule->not) {
                     $success = !$success;
@@ -56,7 +75,6 @@ class RuleController extends Controller
                 }
 
             }
-            dump($allResults);
             if($ruleSet->operation == 'and'
                 && $allResults->filter(fn($i) => $i === false)->count() == 0) {
                 $result = true;
@@ -67,6 +85,33 @@ class RuleController extends Controller
             $destinationValue = $ruleSet->set_value;
             if($ruleSet->set_value_type === 'field') {
                 $destinationValue = \Arr::get($data,$sourceFields->get($ruleSet->set_value)->key);
+                $sourceField = SourceField::find($ruleSet->set_value);
+                if($sourceField->needs_extra_value) {
+                    if($sourceField->key == 'attributes.qualifikationen') {
+                        $key = 'liste';
+                        $value = 'name_kurz';
+                    } elseif($sourceField->key == 'attributes.benutzerdefinierte_felder') {
+                        $key = 'name';
+                        $value = 'value';
+                    } else {
+                        $key = 'name';
+                        $value = 'value';
+                    }
+                    $tmp = \Arr::first($destinationValue, function($item) use ($key, $value, $ruleSet) {
+                        return \Arr::has($item, $key) && $item[$key] == $ruleSet->source_field_extra_name;
+                    });
+                    $destinationValue = $tmp[$value];
+                }
+            } elseif(str_starts_with($ruleSet->set_value_type, 'qualification:')) {
+                $destinationValue = \Arr::get($data,'attributes.qualifikationen');
+                $tmp = \Arr::first($destinationValue, function($item) use ($ruleSet) {
+                    return \Arr::has($item, 'liste') && $item['liste'] == $ruleSet->set_value;
+                });
+                if($ruleSet->set_value_type == 'qualification:name') {
+                    $destinationValue = $tmp['name'];
+                } elseif($ruleSet->set_value_type == 'qualification:name_short') {
+                    $destinationValue = $tmp['name_kurz'];
+                }
             }
             if($ruleSet->type == 'set' && empty($fields[$ruleSet->destinationField->key])) {
                 if($ruleSet->destinationField->type == 'array') {
@@ -91,7 +136,9 @@ class RuleController extends Controller
 
 
         }
-        dd($fields);
+        $provisioning = $fields['provisioning'];
+        $apiFields = \Arr::except($fields,'provisioning');
+        dd($apiFields, $provisioning);
     }
 
     private function getHiorgData(User $user, $provider, $client)

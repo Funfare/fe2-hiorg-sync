@@ -2,6 +2,6 @@
 
 @section('content')
 
-    <livewire:rules :org="$org"></livewire:rules>
+    <livewire:rules :$org :$tab></livewire:rules>
 
 @endsection

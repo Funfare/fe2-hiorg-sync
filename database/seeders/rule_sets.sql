@@ -1,0 +1,12 @@
+INSERT INTO tabs (organization_id, name) VALUES (1, 'Stammdaten');
+INSERT INTO tabs (organization_id, name) VALUES (1, 'OS Funktionen');
+INSERT INTO tabs (organization_id, name) VALUES (1, 'OS Gruppen');
+INSERT INTO tabs (organization_id, name) VALUES (1, 'Alarmgruppen');
+INSERT INTO tabs (organization_id, name) VALUES (1, 'Provisionierung');
+INSERT INTO rule_sets (id, organization_id,tab_id, type, operation, name, "order", set_value, set_value_type, destination_field_id, created_at, updated_at, source_field_extra_name) VALUES (4, 1, null,'abort', 'and', 'Nur Handyalarmierung', 2, null, 'text', 1, '2024-02-19 13:34:10', '2024-02-19 14:06:17', null);
+INSERT INTO rule_sets (id, organization_id,tab_id, type, operation, name, "order", set_value, set_value_type, destination_field_id, created_at, updated_at, source_field_extra_name) VALUES (6, 1, 1,'set', 'and', 'Vorname', 4, '2', 'field', 2, '2024-02-19 13:34:45', '2024-02-19 14:06:17', null);
+INSERT INTO rule_sets (id, organization_id,tab_id, type, operation, name, "order", set_value, set_value_type, destination_field_id, created_at, updated_at, source_field_extra_name) VALUES (7, 1, 1,'set', 'and', 'Nachname', 5, '4', 'field', 3, '2024-02-19 13:35:19', '2024-02-19 14:06:17', null);
+INSERT INTO rule_sets (id, organization_id,tab_id, type, operation, name, "order", set_value, set_value_type, destination_field_id, created_at, updated_at, source_field_extra_name) VALUES (10, 1, null,'set', 'and', 'id', 6, '33', 'field', 1, '2024-02-19 13:37:58', '2024-02-19 14:06:17', null);
+INSERT INTO rule_sets (id, organization_id,tab_id, type, operation, name, "order", set_value, set_value_type, destination_field_id, created_at, updated_at, source_field_extra_name) VALUES (11, 1, 1,'set', 'and', 'E-Mail', 7, '9', 'field', 11, '2024-02-19 13:38:33', '2024-02-19 14:06:17', null);
+INSERT INTO rule_sets (id, organization_id,tab_id, type, operation, name, "order", set_value, set_value_type, destination_field_id, created_at, updated_at, source_field_extra_name) VALUES (12, 1, 1,'set', 'and', 'aPager = E-Mail', 8, '9', 'field', 10, '2024-02-19 13:43:35', '2024-02-19 14:06:17', null);
+INSERT INTO rule_sets (id, organization_id,tab_id, type, operation, name, "order", set_value, set_value_type, destination_field_id, created_at, updated_at, source_field_extra_name) VALUES (13, 1, 1,'set', 'and', 'aPager abweichend', 9, '32', 'field', 10, '2024-02-19 13:44:15', '2024-02-19 14:06:17', 'aPager E-Mail');
