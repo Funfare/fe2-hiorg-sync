@@ -14,6 +14,8 @@
         </div>
         <select wire:model="compare_class" class="form-control-sm">
             <option value="IsEqual">=</option>
+            <option value="Greater">&gt;</option>
+            <option value="GreaterEquals">&gt;=</option>
             <option value="InArray">Enthält in Liste</option>
             <option value="InString">Enthält in Text</option>
             <option value="IsEmpty">Ist leer</option>
