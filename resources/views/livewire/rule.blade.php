@@ -1,4 +1,4 @@
-<div class="col-auto row mb-3">
+<div class="col-auto row">
     <div class="col-auto">
         <div class="form-floating">
             <select wire:model.live="source_field_id" class="form-select">

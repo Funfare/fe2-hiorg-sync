@@ -7,7 +7,7 @@
                 </span>
             </div>
             <div class="col-auto p-0">
-                <div class="form-floating mb-3">
+                <div class="form-floating">
                     <input class="form-control" wire:model="name">
                     <label for="floatingInput">Regelname</label>
                 </div>
