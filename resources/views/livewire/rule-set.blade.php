@@ -3,7 +3,12 @@
         <div class="row">
             <div class="col-auto pt-3">
                 <span wire:sortable.handle>
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-arrows-move" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M18 9l3 3l-3 3" /><path d="M15 12h6" /><path d="M6 9l-3 3l3 3" /><path d="M3 12h6" /><path d="M9 18l3 3l3 -3" /><path d="M12 15v6" /><path d="M15 6l-3 -3l-3 3" /><path d="M12 3v6" /></svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-arrows-move" width="24"
+                         height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none"
+                         stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"
+                                                                              fill="none"/><path d="M18 9l3 3l-3 3"/><path
+                            d="M15 12h6"/><path d="M6 9l-3 3l3 3"/><path d="M3 12h6"/><path d="M9 18l3 3l3 -3"/><path
+                            d="M12 15v6"/><path d="M15 6l-3 -3l-3 3"/><path d="M12 3v6"/></svg>
                 </span>
             </div>
             <div class="col-auto p-0">
@@ -56,22 +61,27 @@
                 <div class="form-floating">
                     @if($set_value_type == 'field')
 
-                        <select wire:model="set_value" class="form-select">
+                        <select wire:model.live="set_value" class="form-select">
                             <option value="">Bitte Wählen</option>
                             @foreach(\App\Models\SourceField::all() as $field)
                                 <option value="{{ $field->id }}">{{ $field->name }}</option>
                             @endforeach
                         </select>
                         <label class="form-label">Bitte wählen</label>
-                        @if($needsSourceFieldExtraName)
-                            Feld/Listenname: <input wire:model="source_field_extra_name" class="form-control-sm">
-                        @endif
                     @elseif($set_value_type != '')
                         <input class="form-control" wire:model="set_value">
                         <label for="floatingInput">Wert</label>
                     @endif
                 </div>
             </div>
+            @if($set_value_type == 'field' && $needsSourceFieldExtraName)
+                <div class="col-auto p-0 ps-2">
+                    <div class="form-floating">
+                        <input class="form-control" wire:model="source_field_extra_name">
+                        <label class="form-label">Feld/Listenname</label>
+                    </div>
+                </div>
+            @endif
         </div>
     </div>
 
@@ -80,7 +90,12 @@
             <div class="row">
                 <div class="col-auto pt-3">
                     <span>
-                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-braces" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 4a2 2 0 0 0 -2 2v3a2 3 0 0 1 -2 3a2 3 0 0 1 2 3v3a2 2 0 0 0 2 2" /><path d="M17 4a2 2 0 0 1 2 2v3a2 3 0 0 0 2 3a2 3 0 0 0 -2 3v3a2 2 0 0 1 -2 2" /></svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-braces" width="24"
+                             height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none"
+                             stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"
+                                                                                  fill="none"/><path
+                                d="M7 4a2 2 0 0 0 -2 2v3a2 3 0 0 1 -2 3a2 3 0 0 1 2 3v3a2 2 0 0 0 2 2"/><path
+                                d="M17 4a2 2 0 0 1 2 2v3a2 3 0 0 0 2 3a2 3 0 0 0 -2 3v3a2 2 0 0 1 -2 2"/></svg>
                     </span>
                 </div>
                 <div class="col-auto ps-0">
@@ -101,11 +116,28 @@
     <div class="card-footer">
         <div class="float-end">
             <button class="btn btn-outline-secondary" wire:click="addRule({{$ruleSet->id}})">
-                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-code-plus" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 12h6" /><path d="M12 9v6" /><path d="M6 19a2 2 0 0 1 -2 -2v-4l-1 -1l1 -1v-4a2 2 0 0 1 2 -2" /><path d="M18 19a2 2 0 0 0 2 -2v-4l1 -1l-1 -1v-4a2 2 0 0 0 -2 -2" /></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-code-plus" width="24"
+                     height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none"
+                     stroke-linecap="round" stroke-linejoin="round">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                    <path d="M9 12h6"/>
+                    <path d="M12 9v6"/>
+                    <path d="M6 19a2 2 0 0 1 -2 -2v-4l-1 -1l1 -1v-4a2 2 0 0 1 2 -2"/>
+                    <path d="M18 19a2 2 0 0 0 2 -2v-4l1 -1l-1 -1v-4a2 2 0 0 0 -2 -2"/>
+                </svg>
                 Bedingung hinzufügen
             </button>
             <button class="btn btn-outline-danger float-end ms-1" wire:click="$parent.removeRuleSet({{$ruleSet->id}})">
-                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-trash" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 7l16 0" /><path d="M10 11l0 6" /><path d="M14 11l0 6" /><path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" /><path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" /></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-trash" width="24"
+                     height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none"
+                     stroke-linecap="round" stroke-linejoin="round">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                    <path d="M4 7l16 0"/>
+                    <path d="M10 11l0 6"/>
+                    <path d="M14 11l0 6"/>
+                    <path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12"/>
+                    <path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3"/>
+                </svg>
                 Regel löschen
             </button>
         </div>
