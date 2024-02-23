@@ -47,7 +47,7 @@ test-branch:
     - main
     - merge_requests
   script:
-    - docker run --rm $CI_CUSTOM_REGISTRY/hiorg-fe2/app:$CI_COMMIT_BRANCH phpunit --configuration phpunit.xml
+    - docker run --rm $CI_CUSTOM_REGISTRY/hiorg-fe2/app:$CI_COMMIT_BRANCH ./vendor/bin/phpunit --configuration phpunit.xml
 deploy-dev:
   stage: deploy
   only:
