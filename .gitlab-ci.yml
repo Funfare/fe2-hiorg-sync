@@ -42,12 +42,13 @@ build-prod:
 
 test-branch:
   stage: test
+  image: $CI_CUSTOM_REGISTRY/hiorg-fe2/app:$CI_COMMIT_BRANCH
   except:
     - tags
     - main
     - merge_requests
   script:
-    - docker run --rm $CI_CUSTOM_REGISTRY/hiorg-fe2/app:$CI_COMMIT_BRANCH ./vendor/bin/phpunit --configuration phpunit.xml
+    - /var/www/vendor/bin/phpunit --configuration phpunit.xml
 deploy-dev:
   stage: deploy
   only:
