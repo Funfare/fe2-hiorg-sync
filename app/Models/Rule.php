@@ -17,4 +17,9 @@ class Rule extends Model
     {
         return $this->belongsTo(SourceField::class);
     }
+
+    public function ruleSet()
+    {
+        return $this->belongsTo(RuleSet::class);
+    }
 }

@@ -11,6 +11,7 @@ variables:
 
 stages:
   - build
+  - test
   - deploy
 
 build-branch:
@@ -37,6 +38,16 @@ build-prod:
   script:
     - docker build --cache-from $CI_CUSTOM_REGISTRY/hiorg-fe2/app:latest-dev -t $CI_CUSTOM_REGISTRY/hiorg-fe2/app:latest .
     - docker push $CI_CUSTOM_REGISTRY/hiorg-fe2/app:latest
+
+
+test-branch:
+  stage: test
+  except:
+    - tags
+    - main
+    - merge_requests
+  script:
+    - docker run --rm $CI_CUSTOM_REGISTRY/hiorg-fe2/app:$CI_COMMIT_BRANCH phpunit --configuration phpunit.xml
 deploy-dev:
   stage: deploy
   only:

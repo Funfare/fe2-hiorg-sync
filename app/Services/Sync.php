@@ -107,10 +107,19 @@ class Sync
                 return \Arr::has($item, 'liste') && $item['liste'] == $ruleSet->set_value;
             });
             if($ruleSet->set_value_type == 'qualification:name') {
-                $destinationValue = $tmp['name'];
+                $destinationValue = $tmp['name'] ?? 'unknown';
             } elseif($ruleSet->set_value_type == 'qualification:name_short') {
-                $destinationValue = $tmp['name_kurz'];
+                $destinationValue = $tmp['name_kurz'] ?? 'unknown';
             }
+        } elseif(str_starts_with($ruleSet->set_value_type, 'phone:formatted')) {
+            $destinationValue = \Arr::get($data,$this->sourceFields->get($ruleSet->set_value)->key);
+            if(str_starts_with($destinationValue, '+')) {
+                $destinationValue = '00'.substr($destinationValue, 1);
+            }
+            if(!str_starts_with($destinationValue, '00')) {
+                $destinationValue = '0049'.substr($destinationValue, 1);
+            }
+            $destinationValue = str_replace([' ', '/', '-', '+'], '', $destinationValue);
         }
         if(is_array($destinationValue)) {
             $destinationValue = implode(',', $destinationValue);

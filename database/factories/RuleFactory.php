@@ -22,7 +22,7 @@ class RuleFactory extends Factory
             'rule_set_id' => fn() => RuleSet::factory()->create()->id,
             'source_field_id' => fn() => SourceField::inRandomOrder()->first()->id,
             'source_field_extra_name' => null,
-            'comapare_class' => 'IsEqual',
+            'compare_class' => 'IsEqual',
             'not' => $this->faker->boolean,
             'compare_value' => $this->faker->words(2),
 

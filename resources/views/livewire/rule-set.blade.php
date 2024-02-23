@@ -52,6 +52,7 @@
                         <option value="field">HiOrg Feld</option>
                         <option value="qualification:name">Qualifikation: Name</option>
                         <option value="qualification:name_short">Qualifikation: Abkürzung</option>
+                        <option value="phone:formatted">Telefonnummer formatiert</option>
                     </select>
                     <label class="form-label">Wert</label>
                 </div>
@@ -59,11 +60,13 @@
 
             <div class="col-auto p-0">
                 <div class="form-floating">
-                    @if($set_value_type == 'field')
+                    @if($set_value_type == 'field' || $set_value_type == 'phone:formatted')
 
                         <select wire:model.live="set_value" class="form-select">
                             <option value="">Bitte Wählen</option>
-                            @foreach(\App\Models\SourceField::all() as $field)
+                            @foreach(\App\Models\SourceField::when(
+    $set_value_type == 'phone:formatted', fn($q) => $q->whereIn('key', ['attributes.telpriv', 'attributes.teldienst', 'attributes.handy']))
+    ->orderBy('name')->get() as $field)
                                 <option value="{{ $field->id }}">{{ $field->name }}</option>
                             @endforeach
                         </select>
