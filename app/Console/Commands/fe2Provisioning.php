@@ -66,11 +66,7 @@ class fe2Provisioning extends Command
                     $reason = 'update_provisioning';
                 }
                 if($update) {
-                    $client->get($org->fe2_link. '/rest/apager/provisioningToSingleDevice/'.$user->id.'?provId='.$provId.'&useAutoMode=false', [
-                        'headers' => [
-                            'Authorization' => 'JWT '.$token
-                        ]
-                    ]);
+                    // assignProvisioning here
                     $assignedProvision[] = [
                         'name' => $user->displayName,
                         'reason' => $reason,

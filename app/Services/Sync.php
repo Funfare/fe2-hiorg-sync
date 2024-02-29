@@ -75,7 +75,7 @@ class Sync
             $tmp = \Arr::first($source, function($item) use ($key, $value, $rule) {
                 return \Arr::has($item, $key) && $item[$key] == $rule->source_field_extra_name;
             });
-            $source = $tmp[$value];
+            $source = $tmp[$value] ?? '';
         }
         return $source;
     }
@@ -120,8 +120,10 @@ class Sync
                 $destinationValue = '0049'.substr($destinationValue, 1);
             }
             $destinationValue = str_replace([' ', '/', '-', '+'], '', $destinationValue);
+        } elseif($ruleSet->set_value_type == 'copy:fe2-field') {
+            $destinationValue = $fields[$ruleSet->set_value] ?? null;
         }
-        if(is_array($destinationValue)) {
+        if(is_array($destinationValue) && $ruleSet->destinationField->type == 'string') {
             $destinationValue = implode(',', $destinationValue);
         }
 
@@ -129,13 +131,13 @@ class Sync
             return false;
         } elseif($ruleSet->type == 'set' && empty($fields[$ruleSet->destinationField->key])) {
             if($ruleSet->destinationField->type == 'array') {
-                $fields[$ruleSet->destinationField->key] = [$destinationValue];
+                $fields[$ruleSet->destinationField->key] = is_array($destinationValue) ? $destinationValue : [$destinationValue];
             } elseif ($ruleSet->destinationField->type == 'string') {
                 $fields[$ruleSet->destinationField->key] = $destinationValue;
             }
         } elseif($ruleSet->type == 'replace') {
             if($ruleSet->destinationField->type == 'array') {
-                $fields[$ruleSet->destinationField->key] = [$destinationValue];
+                $fields[$ruleSet->destinationField->key] = is_array($destinationValue) ? $destinationValue : [$destinationValue];
             } elseif ($ruleSet->destinationField->type == 'string') {
                 $fields[$ruleSet->destinationField->key] = $destinationValue;
             }

@@ -29,6 +29,8 @@ class RuleSet extends Component
 
     public $source_field_extra_name;
     public $needsSourceFieldExtraName = false;
+
+    public $execute_at_end;
     public function addRule()
     {
         $this->ruleSet->rules()->create([

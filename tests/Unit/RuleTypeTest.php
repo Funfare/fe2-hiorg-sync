@@ -533,4 +533,5 @@ class RuleTypeTest extends TestCase
         }
     }
 
+
 }

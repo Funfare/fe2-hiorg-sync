@@ -191,4 +191,184 @@ class RuleValueTest extends TestCase
         }
     }
 
+
+    /**
+     * @test
+     */
+    public function it_copies_a_fe2_value_text_to_text() {
+        RuleSet::factory()
+            ->for($this->org)
+            ->state([
+                'type' => 'set',
+                'operation' => 'and',
+                'set_value' => 'testvalue',
+                'set_value_type' => 'text',
+                'source_field_extra_name' => '',
+                'order' => 0,
+                'destination_field_id' => DestinationField::where('key', 'firstName')->first()->id,
+            ])
+            ->create();
+
+        RuleSet::factory()
+            ->for($this->org)
+            ->state([
+                'type' => 'set',
+                'operation' => 'and',
+                'set_value' => 'firstName',
+                'set_value_type' => 'copy:fe2-field',
+                'source_field_extra_name' => '',
+                'order' => 0,
+                'execute_at_end' => 1,
+                'destination_field_id' => DestinationField::where('key', 'lastName')->first()->id,
+            ])
+            ->create();
+        $user = $this->sync->getDataFromHiorgUser($this->data, $this->org->ruleSets);
+
+        $this->assertEquals('testvalue', $user['firstName']);
+        $this->assertEquals('testvalue', $user['lastName']);
+        foreach(\Arr::except($user, ['firstName', 'lastName']) as $field) {
+            $this->assertNull($field);
+        }
+    }
+
+    /**
+     * @test
+     */
+    public function it_copies_a_fe2_value_text_to_array() {
+        RuleSet::factory()
+            ->for($this->org)
+            ->state([
+                'type' => 'set',
+                'operation' => 'and',
+                'set_value' => 'testvalue',
+                'set_value_type' => 'text',
+                'source_field_extra_name' => '',
+                'order' => 0,
+                'destination_field_id' => DestinationField::where('key', 'firstName')->first()->id,
+            ])
+            ->create();
+
+        RuleSet::factory()
+            ->for($this->org)
+            ->state([
+                'type' => 'set',
+                'operation' => 'and',
+                'set_value' => 'firstName',
+                'set_value_type' => 'copy:fe2-field',
+                'source_field_extra_name' => '',
+                'order' => 0,
+                'execute_at_end' => 1,
+                'destination_field_id' => DestinationField::where('key', 'osFunctions')->first()->id,
+            ])
+            ->create();
+        $user = $this->sync->getDataFromHiorgUser($this->data, $this->org->ruleSets);
+
+        $this->assertEquals('testvalue', $user['firstName']);
+        $this->assertEquals(['testvalue'], $user['osFunctions']);
+        foreach(\Arr::except($user, ['firstName', 'osFunctions']) as $field) {
+            $this->assertNull($field);
+        }
+    }
+
+    /**
+     * @test
+     */
+    public function it_copies_a_fe2_value_array_to_text() {
+        RuleSet::factory()
+            ->for($this->org)
+            ->state([
+                'type' => 'set',
+                'operation' => 'and',
+                'set_value' => 'testvalue',
+                'set_value_type' => 'text',
+                'source_field_extra_name' => '',
+                'order' => 0,
+                'destination_field_id' => DestinationField::where('key', 'osFunctions')->first()->id,
+            ])
+            ->create();
+        RuleSet::factory()
+            ->for($this->org)
+            ->state([
+                'type' => 'add',
+                'operation' => 'and',
+                'set_value' => 'testvalue2',
+                'set_value_type' => 'text',
+                'source_field_extra_name' => '',
+                'order' => 0,
+                'destination_field_id' => DestinationField::where('key', 'osFunctions')->first()->id,
+            ])
+            ->create();
+
+        RuleSet::factory()
+            ->for($this->org)
+            ->state([
+                'type' => 'set',
+                'operation' => 'and',
+                'set_value' => 'osFunctions',
+                'set_value_type' => 'copy:fe2-field',
+                'source_field_extra_name' => '',
+                'order' => 0,
+                'execute_at_end' => 1,
+                'destination_field_id' => DestinationField::where('key', 'firstName')->first()->id,
+            ])
+            ->create();
+        $user = $this->sync->getDataFromHiorgUser($this->data, $this->org->ruleSets);
+
+        $this->assertEquals('testvalue,testvalue2', $user['firstName']);
+        $this->assertEquals(['testvalue', 'testvalue2'], $user['osFunctions']);
+        foreach(\Arr::except($user, ['firstName', 'osFunctions']) as $field) {
+            $this->assertNull($field);
+        }
+    }
+
+    /**
+     * @test
+     */
+    public function it_copies_a_fe2_value_array_to_array() {
+        RuleSet::factory()
+            ->for($this->org)
+            ->state([
+                'type' => 'set',
+                'operation' => 'and',
+                'set_value' => 'testvalue',
+                'set_value_type' => 'text',
+                'source_field_extra_name' => '',
+                'order' => 0,
+                'destination_field_id' => DestinationField::where('key', 'osFunctions')->first()->id,
+            ])
+            ->create();
+        RuleSet::factory()
+            ->for($this->org)
+            ->state([
+                'type' => 'add',
+                'operation' => 'and',
+                'set_value' => 'testvalue2',
+                'set_value_type' => 'text',
+                'source_field_extra_name' => '',
+                'order' => 0,
+                'destination_field_id' => DestinationField::where('key', 'osFunctions')->first()->id,
+            ])
+            ->create();
+
+        RuleSet::factory()
+            ->for($this->org)
+            ->state([
+                'type' => 'set',
+                'operation' => 'and',
+                'set_value' => 'osFunctions',
+                'set_value_type' => 'copy:fe2-field',
+                'source_field_extra_name' => '',
+                'order' => 0,
+                'execute_at_end' => 1,
+                'destination_field_id' => DestinationField::where('key', 'osGroups')->first()->id,
+            ])
+            ->create();
+        $user = $this->sync->getDataFromHiorgUser($this->data, $this->org->ruleSets);
+
+        $this->assertEquals(['testvalue', 'testvalue2'], $user['osGroups']);
+        $this->assertEquals(['testvalue', 'testvalue2'], $user['osFunctions']);
+        foreach(\Arr::except($user, ['osGroups', 'osFunctions']) as $field) {
+            $this->assertNull($field);
+        }
+    }
 }

@@ -6,7 +6,7 @@ class InArray
 {
     public function valid($source, $value) {
         if(!is_array($source) && !$source instanceof \ArrayAccess) {
-            return false;
+            return \Str::contains($source, $value);
         }
 
         return in_array($value, $source);

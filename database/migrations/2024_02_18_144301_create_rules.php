@@ -281,6 +281,7 @@ return new class extends Migration
             $table->string('set_value')->nullable();
             $table->string('set_value_type')->default('text'); //text,field,Qualifikation:Name,Qualifikation:nameKurz
             $table->string('source_field_extra_name')->nullable();
+            $table->boolean('execute_at_end')->default(0);
             $table->foreignIdFor(\App\Models\DestinationField::class)->nullable();
             $table->timestamps();
         });

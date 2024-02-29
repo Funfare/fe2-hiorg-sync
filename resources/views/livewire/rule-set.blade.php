@@ -53,6 +53,7 @@
                         <option value="qualification:name">Qualifikation: Name</option>
                         <option value="qualification:name_short">Qualifikation: Abkürzung</option>
                         <option value="phone:formatted">Telefonnummer formatiert</option>
+                        <option value="copy:fe2-field">FE2 Feld</option>
                     </select>
                     <label class="form-label">Wert</label>
                 </div>
@@ -68,6 +69,14 @@
     $set_value_type == 'phone:formatted', fn($q) => $q->whereIn('key', ['attributes.telpriv', 'attributes.teldienst', 'attributes.handy']))
     ->orderBy('name')->get() as $field)
                                 <option value="{{ $field->id }}">{{ $field->name }}</option>
+                            @endforeach
+                        </select>
+                        <label class="form-label">Bitte wählen</label>
+                    @elseif($set_value_type == 'copy:fe2-field')
+                        <select wire:model="set_value" class="form-select">
+                            <option value="">Bitte Wählen</option>
+                            @foreach(\App\Models\DestinationField::orderBy('name')->get() as $field)
+                                <option value="{{ $field->key }}">{{ $field->name }}</option>
                             @endforeach
                         </select>
                         <label class="form-label">Bitte wählen</label>
@@ -117,6 +126,12 @@
         </div>
     @endif
     <div class="card-footer">
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" wire:model="execute_at_end" type="checkbox" value="1" id="endCheckbox{{$ruleSet->id}}">
+            <label class="form-check-label" for="endCheckbox{{$ruleSet->id}}">
+                Als letztes Ausführen (z.B. für Feld-Kopieren)
+            </label>
+        </div>
         <div class="float-end">
             <button class="btn btn-outline-secondary" wire:click="addRule({{$ruleSet->id}})">
                 <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-code-plus" width="24"

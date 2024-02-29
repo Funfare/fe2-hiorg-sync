@@ -9,6 +9,9 @@ class RuleSet extends Model
 {
     use HasFactory;
     protected $guarded = ['id'];
+    protected $casts = [
+        'execute_at_end' => 'boolean'
+    ];
 
     public function organization()
     {
