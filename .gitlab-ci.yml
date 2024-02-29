@@ -52,7 +52,14 @@ test-branch:
     - composer install
     - cp .env.example .env
     - php artisan key:generate
-    - ./vendor/bin/phpunit --configuration phpunit.xml
+    - ./vendor/bin/phpunit --configuration phpunit.xml --log-junit report.xml
+
+  artifacts:
+    when: always
+    paths:
+      - report.xml
+    reports:
+      junit: report.xml
 deploy-dev:
   stage: deploy
   only:
