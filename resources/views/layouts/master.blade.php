@@ -89,7 +89,7 @@
     </div>
 </nav>
 
-<main class="container">
+<main class="container-xxl">
     <div class="bg-light p-5 rounded">
         @if(session('message'))
             <div class="alert alert-success">
