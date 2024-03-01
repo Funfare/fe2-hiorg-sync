@@ -5,6 +5,6 @@ namespace App\Compares;
 class IsEmpty
 {
     public function valid($source, $value) {
-        return trim($source) == '';
+        return empty(trim($source));
     }
 }

@@ -7,5 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class Tab extends Model
 {
+    public $timestamps = false;
     use HasFactory;
 }

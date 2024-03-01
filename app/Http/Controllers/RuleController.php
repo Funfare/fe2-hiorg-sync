@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\Hiorg;
 use App\Models\DestinationField;
 use App\Models\SourceField;
 use App\Models\Tab;
@@ -21,70 +22,28 @@ class RuleController extends Controller
     }
 
 
-    public function test(GenericProvider $provider, Client $client)
+    public function preview(GenericProvider $provider, Client $client)
     {
-        $user = \Auth::user();
-//        $data = $this->getHiorgData($user, $provider, $client)['data'];
+        $org = \Auth::user()->organization;
         $sourceFields = SourceField::all()->keyBy('id');
-        $fields = DestinationField::pluck('key')->flip()->map(fn($i) => null)->toArray();
-        $org = $user->organization;
+        $fe2Fields = DestinationField::orderBy('name')->get();
+        $fields = $fe2Fields->pluck('key')->flip()->map(fn($i) => null)->toArray();
+        $hiorg = app(Hiorg::class, compact('client', 'provider', 'org'));
+        $data = $hiorg->getUsers();
 
-        $data = \Cache::remember('test-hiorg-data', now()->addHour(), function() use ($org, $provider, $client){
-            $accessToken = new \League\OAuth2\Client\Token\AccessToken($org->hiorg_token);
-            if($accessToken->hasExpired()) {
-                $accessToken = $provider->getAccessToken('refresh_token', [
-                    'refresh_token' => $accessToken->getRefreshToken()
-                ]);
-                $org->hiorg_token = $accessToken->jsonSerialize();
-                $org->save();
-            }
-
-            $response = $client->get('https://api.hiorg-server.de/core/v1/personal', [
-                'headers' => [
-                    'Authorization' => $accessToken->getToken()
-                ]
-            ]);
-            $data = json_decode($response->getBody()->getContents(), JSON_OBJECT_AS_ARRAY);
-            return $data;
-        });
-         $org->load([
-             'ruleSets' => fn($q) => $q->orderBy('order')->where('type', '!=', 'spacer'),
-             'ruleSets.rules.sourceField',
-             'ruleSets.destinationField',
-         ]);
-        $sync = new Sync($sourceFields, $fields);
-        $users = [];
-        $provision = [];
+        $sync = [];
+        $org->load([
+            'ruleSets' => fn($q) => $q->orderBy('execute_at_end')->orderBy('order')->where('type', '!=', 'spacer'),
+            'ruleSets.rules.sourceField',
+            'ruleSets.destinationField',
+        ]);
+        $syncService = new \App\Services\Sync($sourceFields, $fields);
         foreach($data['data'] as $row) {
-            $user = $sync->getDataFromHiorgUser($row, $org->ruleSets);
+            $user = $syncService->getDataFromHiorgUser($row, $org->ruleSets);
             if($user !== false) {
-                $users[] = \Arr::except($user, ['provisioning']);
-                $provision[$user['externalDbId']] = $user['provisioning'];
+                $sync[] = $user;
             }
         }
-
-        dd($users, $provision);
-
-    }
-
-    private function getHiorgData(User $user, $provider, $client)
-    {
-        return \Cache::remember('hiorg-self-user-' . $user->id, now()->addHour(), function () use ($provider, $client, $user) {
-            $accessToken = new \League\OAuth2\Client\Token\AccessToken($user->hiorg_token);
-            if ($accessToken->hasExpired()) {
-                $accessToken = $provider->getAccessToken('refresh_token', [
-                    'refresh_token' => $accessToken->getRefreshToken()
-                ]);
-                $user->hiorg_token = $accessToken->jsonSerialize();
-                $user->save();
-            }
-
-            $response = $client->get('https://api.hiorg-server.de/core/v1/personal/selbst', [
-                'headers' => [
-                    'Authorization' => $accessToken->getToken()
-                ]
-            ]);
-            return json_decode($response->getBody()->getContents(), JSON_OBJECT_AS_ARRAY);
-        });
+        return view('organizations.rules.preview', compact('sync','fe2Fields'));
     }
 }

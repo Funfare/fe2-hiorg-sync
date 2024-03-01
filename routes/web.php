@@ -34,6 +34,7 @@ Route::middleware('auth')->group(function() {
         Route::get('/settings', [\App\Http\Controllers\OrganizationController::class, 'edit'])->name('settings');
         Route::get('/users', [\App\Http\Controllers\UserController::class, 'index'])->name('users');
         Route::get('/users/{user}', [\App\Http\Controllers\UserController::class, 'show'])->name('users.show');
+        Route::get('/rules/preview', [\App\Http\Controllers\RuleController::class, 'preview'])->name('rules.preview');
         Route::get('/rules/{tab?}', [\App\Http\Controllers\RuleController::class, 'show'])->name('rules.show');
         Route::get('/test', [\App\Http\Controllers\RuleController::class, 'test'])->name('rules.test');
         Route::get('login/user/{user}', [\App\Http\Controllers\AuthController::class, 'loginAsUser'])->name('impersonate.user');
