@@ -6,13 +6,16 @@ use App\Models\Organization;
 use App\Models\Rule;
 use App\Models\RuleSet;
 use App\Models\Tab;
+use Illuminate\Http\Request;
 use Livewire\Component;
 
 class Rules extends Component
 {
     public Organization $org;
 
+
     public ?Tab $tab = null;
+
     public function mount(Organization $org, $tab)
     {
         $this->org = $org;

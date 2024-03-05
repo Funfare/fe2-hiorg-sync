@@ -51,7 +51,15 @@ class AuthController extends Controller
                 'hiorg_token' => $accessToken->jsonSerialize(),
                 'organization_id' => $org->id
             ]);
-
+            if($org->wasRecentlyCreated) {
+                $org->tabs()->createMany([
+                    ['name' => 'Stammdaten'],
+                    ['name' => 'OS Funktionen'],
+                    ['name' => 'OS Gruppen'],
+                    ['name' => 'Alarmgruppen'],
+                    ['name' => 'Provisionierung'],
+                ]);
+            }
             Auth::login($user, true);
             return redirect()->route('home');
 //        );

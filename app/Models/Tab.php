@@ -9,4 +9,10 @@ class Tab extends Model
 {
     public $timestamps = false;
     use HasFactory;
+
+    protected $guarded = ['id'];
+    public function ruleSets()
+    {
+        return $this->hasMany(RuleSet::class);
+    }
 }
