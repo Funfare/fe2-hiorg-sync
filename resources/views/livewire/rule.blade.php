@@ -30,6 +30,7 @@
                 <option value="IsEmpty">Ist leer</option>
                 <option value="IsOlder">Älter als</option>
                 <option value="ValueListInArray">Enthält eines der Werte</option>
+                <option value="InFuture">In der Zukunft</option>
             </select>
             <label class="form-label">Vergleich</label>
         </div>
