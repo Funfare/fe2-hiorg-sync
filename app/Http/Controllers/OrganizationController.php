@@ -13,6 +13,7 @@ use App\Models\User;
 use App\Models\Sync;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
+use League\OAuth2\Client\Provider\Exception\IdentityProviderException;
 use League\OAuth2\Client\Provider\GenericProvider;
 use League\OAuth2\Client\Token\AccessToken;
 
@@ -22,7 +23,12 @@ class OrganizationController extends Controller
     {
         $user = \Auth::user();
         $org = $user->organization;
-        $fe2 = $this->getSyncData($client, $provider);
+        try {
+            $fe2 = $this->getSyncData($client, $provider);
+        } catch(IdentityProviderException $e) {
+            \Auth::logout();
+            return redirect()->route('login');
+        }
         $valid = $fe2 !== false;
         $syncs = $org->syncs()->latest()->paginate(20);
         return view('organizations.show', compact('org', 'syncs', 'valid'));
@@ -30,7 +36,12 @@ class OrganizationController extends Controller
 
     public function me(GenericProvider $provider, Client $client)
     {
-        $fe2 = $this->getSyncData($client, $provider);
+        try {
+            $fe2 = $this->getSyncData($client, $provider);
+        } catch(IdentityProviderException $e) {
+            \Auth::logout();
+            return redirect()->route('login');
+        }
         $valid = $fe2 !== false;
 
         return view('organizations.me', compact('valid', 'fe2'));
@@ -71,7 +82,12 @@ class OrganizationController extends Controller
     {
         $user = \Auth::user();
         $org = $user->organization;
-        $data = $this->getSyncData($client, $provider);
+        try {
+            $data = $this->getSyncData($client, $provider);
+        } catch(IdentityProviderException $e) {
+            \Auth::logout();
+            return redirect()->route('login');
+        }
         $fe2 = new FE2($client, $org);
         $allProvisionings = $fe2->getProvisionings();
 
