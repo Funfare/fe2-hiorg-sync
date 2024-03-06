@@ -15,13 +15,28 @@ class Hiorg
 
     public function getToken()
     {
-        $accessToken = new \League\OAuth2\Client\Token\AccessToken($this->org->hiorg_token);
+        $token = $this->org->hiorg_token;
+        $accessToken = new \League\OAuth2\Client\Token\AccessToken($token);
         if($accessToken->hasExpired()) {
             $accessToken = $this->provider->getAccessToken('refresh_token', [
                 'refresh_token' => $accessToken->getRefreshToken()
             ]);
             $this->org->hiorg_token = $accessToken->jsonSerialize();
             $this->org->save();
+        }
+        return $accessToken;
+    }
+
+    public function getUserToken(User $user)
+    {
+        $token = $user->hiorg_token;
+        $accessToken = new \League\OAuth2\Client\Token\AccessToken($token);
+        if($accessToken->hasExpired()) {
+            $accessToken = $this->provider->getAccessToken('refresh_token', [
+                'refresh_token' => $accessToken->getRefreshToken()
+            ]);
+            $user->hiorg_token = $accessToken->jsonSerialize();
+            $user->save();
         }
         return $accessToken;
     }
@@ -50,8 +65,8 @@ class Hiorg
         if($forceFetch) {
             \Cache::forget($key);
         }
-        return \Cache::remember($key, now()->addHour(), function() {
-            $accessToken = $this->getToken();
+        return \Cache::remember($key, now()->addHour(), function() use ($user) {
+            $accessToken = $this->getUserToken($user);
             $response = $this->client->get('https://api.hiorg-server.de/core/v1/personal/selbst', [
                 'headers' => [
                     'Authorization' => $accessToken->getToken()

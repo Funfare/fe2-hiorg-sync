@@ -69,4 +69,22 @@ class FE2
 
         return $response;
     }
+
+    public function alarm($user, $info = false)
+    {
+        $this->client->post($this->org->fe2_link . '/rest/addressbook/external/person/' . $user->key . '/alarm', [
+            'headers' => [
+                'Authorization' => $this->org->fe2_sync_token
+            ],
+            'json' => [
+                "type" => $info ? 'INFO' : 'ALARM', // INFO
+                "title" => "Test-Alarmierung",
+                "color" => "#FE2E2E",
+                "message" => "Testalarmierung aus dem Self-Service-Portal",
+                "group" => "JUH Wü SEG Behandlung",
+                "withFeedback" => true,
+                "expiresHours" => 1
+            ]
+        ]);
+    }
 }

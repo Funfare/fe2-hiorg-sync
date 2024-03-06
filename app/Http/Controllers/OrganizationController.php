@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\FE2;
 use App\Helpers\Hiorg;
 use App\Helpers\Sync\Factory;
 use App\Helpers\Sync\Generic;
@@ -70,68 +71,40 @@ class OrganizationController extends Controller
     {
         $user = \Auth::user();
         $org = $user->organization;
-        $data = $this->getHiorgData($user, $provider, $client);
-        $record = $data['data'];
-        $helper = Factory::make($user->organization);
-        $valid = $helper->isValid($record);
-        $fe2 = $helper->getDataFromRecord($record);
-        abort_if(!$valid, 403);
+        $data = $this->getSyncData($client, $provider);
+        $fe2 = new FE2($client, $org);
+        $allProvisionings = $fe2->getProvisionings();
 
-        $login = $client->post($org->fe2_link . '/rest/login', [
-            'json' => [
-                'username' => $org->fe2_user,
-                'password' => $org->fe2_pass,
-                'source' => "WEB"
-            ]
-        ]);
-        $token = json_decode($login->getBody()->getContents())->token;
+        $prov = $allProvisionings->where('name', $data['provisioning'])->first();
+        $allUserProvisionings = $fe2->getUserProvisionings();
+        $aPager = $data['aPagerPro'];
+        if(!\Str::contains($aPager, '@')) {
+            // Tokens werden in der Provision-API klein geschrieben
+            $aPager = mb_strtolower($aPager);
+        }
+        $fe2User = $allUserProvisionings->where('apager', $aPager)->first();
+        $fe2->assignProvisioning($fe2User->id, $prov->id);
 
-        $provId = in_array('Führung', $fe2['alarmGroups'] ?? []) ? $org->fe2_provisioning_leader : $org->fe2_provisioning_user;
-        $userInfoRequest = $client->get($org->fe2_link . '/rest/addressbook/paginated/simple?page=0&filter=&ordering=ASC&limit=5000', [
-            'headers' => [
-                'Authorization' => 'JWT ' . $token
-            ]
-        ]);
-        $userInfo = collect(json_decode($userInfoRequest->getBody()->getContents())->persons);
-        $userData = $userInfo->where('apagerPro', $fe2['aPagerPro'])->first();
-        $client->get($org->fe2_link . '/rest/apager/provisioningToSingleDevice/' . $userData->personID . '?provId=' . $provId . '&useAutoMode=false', [
-            'headers' => [
-                'Authorization' => 'JWT ' . $token
-            ]
-        ]);
         $assignedProvision[] = [
             'name' => $user->name,
             'reason' => 'user_request',
-            'provision' => $provId
+            'provision' => $prov->name
         ];
         Sync::create([
             'organization_id' => $org->id,
             'type' => 'prov',
             'data' => $assignedProvision,
         ]);
-        return redirect()->route('home')->with('message', 'Provisionierung wurde an ' . $fe2['aPagerPro'] . ' gesendet.');
+        return redirect()->route('home')->with('message', 'Provisionierung wurde an ' . $data['aPagerPro'] . ' gesendet.');
     }
 
     public function alarm($type, Client $client)
     {
         $user = \Auth::user();
         $org = $user->organization;
-        $alarm = $type == 'alarm' ? 'ALARM' : 'INFO';
-        $userInfoRequest = $client->post($org->fe2_link . '/rest/addressbook/external/person/' . $user->key . '/alarm', [
-            'headers' => [
-                'Authorization' => $org->fe2_sync_token
-            ],
-            'json' => [
-                "type" => $alarm, // INFO
-                "title" => "Test-Alarmierung",
-                "color" => "#FE2E2E",
-                "message" => "Testalarmierung aus dem Self-Service-Portal",
-                "group" => "JUH Wü SEG Behandlung",
-                "withFeedback" => true,
-                "expiresHours" => 1
-
-            ]
-        ]);
+        $alarm = $type != 'alarm';
+        $fe2 = new FE2($client, $org);
+        $fe2->alarm($user, $alarm);
         $assignedProvision[] = [
             'name' => $user->name,
             'reason' => 'user_request',
