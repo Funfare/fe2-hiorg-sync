@@ -55,7 +55,7 @@ class RuleOperatorTest extends TestCase
         $user = $this->sync->getDataFromHiorgUser($this->data, $this->org->ruleSets);
 
         $this->assertEquals('testvalue', $user['firstName']);
-        foreach(\Arr::except($user, ['firstName']) as $field) {
+        foreach(\Arr::except($user, ['firstName', 'aPagerProFieldMode']) as $field) {
             $this->assertNull($field);
         }
     }
@@ -87,7 +87,7 @@ class RuleOperatorTest extends TestCase
         $user = $this->sync->getDataFromHiorgUser($this->data, $this->org->ruleSets);
 
         $this->assertEquals('testvalue', $user['firstName']);
-        foreach(\Arr::except($user, ['firstName']) as $field) {
+        foreach(\Arr::except($user, ['firstName', 'aPagerProFieldMode']) as $field) {
             $this->assertNull($field);
         }
     }
@@ -119,7 +119,7 @@ class RuleOperatorTest extends TestCase
         $user = $this->sync->getDataFromHiorgUser($this->data, $this->org->ruleSets);
 
         $this->assertNull($user['firstName']);
-        foreach(\Arr::except($user, ['firstName']) as $field) {
+        foreach(\Arr::except($user, ['firstName', 'aPagerProFieldMode']) as $field) {
             $this->assertNull($field);
         }
     }
@@ -151,7 +151,7 @@ class RuleOperatorTest extends TestCase
         $user = $this->sync->getDataFromHiorgUser($this->data, $this->org->ruleSets);
 
         $this->assertNull($user['firstName']);
-        foreach(\Arr::except($user, ['firstName']) as $field) {
+        foreach(\Arr::except($user, ['firstName', 'aPagerProFieldMode']) as $field) {
             $this->assertNull($field);
         }
     }
@@ -189,7 +189,7 @@ class RuleOperatorTest extends TestCase
         $user = $this->sync->getDataFromHiorgUser($this->data, $this->org->ruleSets);
 
         $this->assertNull($user['firstName']);
-        foreach(\Arr::except($user, ['firstName']) as $field) {
+        foreach(\Arr::except($user, ['firstName', 'aPagerProFieldMode']) as $field) {
             $this->assertNull($field);
         }
     }
@@ -228,7 +228,7 @@ class RuleOperatorTest extends TestCase
         $user = $this->sync->getDataFromHiorgUser($this->data, $this->org->ruleSets);
 
         $this->assertEquals('testvalue', $user['firstName']);
-        foreach(\Arr::except($user, ['firstName']) as $field) {
+        foreach(\Arr::except($user, ['firstName', 'aPagerProFieldMode']) as $field) {
             $this->assertNull($field);
         }
     }
@@ -267,7 +267,7 @@ class RuleOperatorTest extends TestCase
         $user = $this->sync->getDataFromHiorgUser($this->data, $this->org->ruleSets);
 
         $this->assertEquals('testvalue', $user['firstName']);
-        foreach(\Arr::except($user, ['firstName']) as $field) {
+        foreach(\Arr::except($user, ['firstName', 'aPagerProFieldMode']) as $field) {
             $this->assertNull($field);
         }
     }
@@ -306,7 +306,7 @@ class RuleOperatorTest extends TestCase
         $user = $this->sync->getDataFromHiorgUser($this->data, $this->org->ruleSets);
 
         $this->assertEquals('testvalue', $user['firstName']);
-        foreach(\Arr::except($user, ['firstName']) as $field) {
+        foreach(\Arr::except($user, ['firstName', 'aPagerProFieldMode']) as $field) {
             $this->assertNull($field);
         }
     }

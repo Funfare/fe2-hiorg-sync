@@ -46,7 +46,7 @@ class RuleTypeTest extends TestCase
         $user = $this->sync->getDataFromHiorgUser($this->data, $this->org->ruleSets);
 
         $this->assertEquals('testvalue', $user['firstName']);
-        foreach(\Arr::except($user, ['firstName']) as $field) {
+        foreach(\Arr::except($user, ['firstName', 'aPagerProFieldMode']) as $field) {
             $this->assertNull($field);
         }
     }
@@ -82,7 +82,7 @@ class RuleTypeTest extends TestCase
         $user = $this->sync->getDataFromHiorgUser($this->data, $this->org->ruleSets);
 
         $this->assertEquals('testvalue', $user['firstName']);
-        foreach(\Arr::except($user, ['firstName']) as $field) {
+        foreach(\Arr::except($user, ['firstName', 'aPagerProFieldMode']) as $field) {
             $this->assertNull($field);
         }
     }
@@ -118,7 +118,7 @@ class RuleTypeTest extends TestCase
         $user = $this->sync->getDataFromHiorgUser($this->data, $this->org->ruleSets);
 
         $this->assertEquals('testvalue2', $user['firstName']);
-        foreach(\Arr::except($user, ['firstName']) as $field) {
+        foreach(\Arr::except($user, ['firstName', 'aPagerProFieldMode']) as $field) {
             $this->assertNull($field);
         }
     }
@@ -153,7 +153,7 @@ class RuleTypeTest extends TestCase
         $user = $this->sync->getDataFromHiorgUser($this->data, $this->org->ruleSets);
 
         $this->assertEquals('testvaluetest2', $user['firstName']);
-        foreach(\Arr::except($user, ['firstName']) as $field) {
+        foreach(\Arr::except($user, ['firstName', 'aPagerProFieldMode']) as $field) {
             $this->assertNull($field);
         }
     }
@@ -189,7 +189,7 @@ class RuleTypeTest extends TestCase
         $user = $this->sync->getDataFromHiorgUser($this->data, $this->org->ruleSets);
 
         $this->assertEquals('value', $user['firstName']);
-        foreach(\Arr::except($user, ['firstName']) as $field) {
+        foreach(\Arr::except($user, ['firstName', 'aPagerProFieldMode']) as $field) {
             $this->assertNull($field);
         }
     }
@@ -225,7 +225,7 @@ class RuleTypeTest extends TestCase
         $user = $this->sync->getDataFromHiorgUser($this->data, $this->org->ruleSets);
 
         $this->assertEquals('testvalue', $user['firstName']);
-        foreach(\Arr::except($user, ['firstName']) as $field) {
+        foreach(\Arr::except($user, ['firstName', 'aPagerProFieldMode']) as $field) {
             $this->assertNull($field);
         }
     }
@@ -249,7 +249,7 @@ class RuleTypeTest extends TestCase
         $user = $this->sync->getDataFromHiorgUser($this->data, $this->org->ruleSets);
 
         $this->assertEquals('', $user['firstName']);
-        foreach(\Arr::except($user, ['firstName']) as $field) {
+        foreach(\Arr::except($user, ['firstName', 'aPagerProFieldMode']) as $field) {
             $this->assertNull($field);
         }
     }
@@ -296,7 +296,7 @@ class RuleTypeTest extends TestCase
 
         $this->assertIsArray($user['alarmGroups']);
         $this->assertEquals(['testvalue'], $user['alarmGroups']);
-        foreach(\Arr::except($user, ['alarmGroups']) as $field) {
+        foreach(\Arr::except($user, ['alarmGroups', 'aPagerProFieldMode']) as $field) {
             $this->assertNull($field);
         }
     }
@@ -333,7 +333,7 @@ class RuleTypeTest extends TestCase
 
         $this->assertIsArray($user['alarmGroups']);
         $this->assertEquals(['testvalue'], $user['alarmGroups']);
-        foreach(\Arr::except($user, ['alarmGroups']) as $field) {
+        foreach(\Arr::except($user, ['alarmGroups', 'aPagerProFieldMode']) as $field) {
             $this->assertNull($field);
         }
     }
@@ -370,7 +370,7 @@ class RuleTypeTest extends TestCase
 
         $this->assertIsArray($user['alarmGroups']);
         $this->assertEquals(['testvalue2'], $user['alarmGroups']);
-        foreach(\Arr::except($user, ['alarmGroups']) as $field) {
+        foreach(\Arr::except($user, ['alarmGroups', 'aPagerProFieldMode']) as $field) {
             $this->assertNull($field);
         }
     }
@@ -406,7 +406,7 @@ class RuleTypeTest extends TestCase
 
         $this->assertIsArray($user['alarmGroups']);
         $this->assertEquals(['testvalue', 'test2'], $user['alarmGroups']);
-        foreach(\Arr::except($user, ['alarmGroups']) as $field) {
+        foreach(\Arr::except($user, ['alarmGroups', 'aPagerProFieldMode']) as $field) {
             $this->assertNull($field);
         }
     }
@@ -455,7 +455,7 @@ class RuleTypeTest extends TestCase
 
         $this->assertIsArray($user['alarmGroups']);
         $this->assertEquals(['testvalue2'], $user['alarmGroups']);
-        foreach(\Arr::except($user, ['alarmGroups']) as $field) {
+        foreach(\Arr::except($user, ['alarmGroups', 'aPagerProFieldMode']) as $field) {
             $this->assertNull($field);
         }
     }
@@ -504,7 +504,7 @@ class RuleTypeTest extends TestCase
 
         $this->assertIsArray($user['alarmGroups']);
         $this->assertEquals(['testvalue', 'testvalue2'], $user['alarmGroups']);
-        foreach(\Arr::except($user, ['alarmGroups']) as $field) {
+        foreach(\Arr::except($user, ['alarmGroups', 'aPagerProFieldMode']) as $field) {
             $this->assertNull($field);
         }
     }
@@ -528,7 +528,7 @@ class RuleTypeTest extends TestCase
         $user = $this->sync->getDataFromHiorgUser($this->data, $this->org->ruleSets);
 
         $this->assertEquals('', $user['alarmGroups']);
-        foreach(\Arr::except($user, ['alarmGroups']) as $field) {
+        foreach(\Arr::except($user, ['alarmGroups', 'aPagerProFieldMode']) as $field) {
             $this->assertNull($field);
         }
     }
