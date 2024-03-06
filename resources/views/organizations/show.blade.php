@@ -53,7 +53,13 @@
                     {{ $sync->created_at->format('d.m.Y H:i') }}
                 </td>
                 <td>
-                    {{ $sync->type == 'sync' ? 'Personal synchronisiert' : 'Provisionierung aktualisiert' }}
+                    @if($sync->type == 'sync')
+                        Personal synchronisiert
+                    @elseif($sync->type == 'prov')
+                        Provisionierung aktualisiert
+                    @elseif($sync->type == 'alarm')
+                        Alarm ausgelöst
+                    @endif
                 </td>
                 <td>
                     @if($sync->type == 'sync')
