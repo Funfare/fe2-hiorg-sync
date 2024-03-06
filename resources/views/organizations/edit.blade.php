@@ -30,5 +30,7 @@
         @endif
         <a href="{{route('settings.setAdmin')}}" class="btn btn-primary">Neuen Administrator festlegen</a>
     </p>
+    <h3>Manueller Sync</h3>
+    <a href="{{ route('settings.sync') }}" class="btn btn-danger">Manuellen Sync durchführen</a>
 
 @endsection

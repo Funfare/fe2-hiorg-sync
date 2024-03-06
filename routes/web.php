@@ -31,6 +31,7 @@ Route::middleware('auth')->group(function() {
         Route::get('/sync/{sync}', [\App\Http\Controllers\SyncController::class, 'show'])->name('sync');
         Route::post('/settings', [\App\Http\Controllers\OrganizationController::class, 'update']);
         Route::get('/settings/setAdmin', [\App\Http\Controllers\OrganizationController::class, 'setAdmin'])->name('settings.setAdmin');
+        Route::get('/settings/sync', [\App\Http\Controllers\OrganizationController::class, 'sync'])->name('settings.sync');
         Route::get('/settings', [\App\Http\Controllers\OrganizationController::class, 'edit'])->name('settings');
         Route::get('/users', [\App\Http\Controllers\UserController::class, 'index'])->name('users');
         Route::get('/users/{user}', [\App\Http\Controllers\UserController::class, 'show'])->name('users.show');

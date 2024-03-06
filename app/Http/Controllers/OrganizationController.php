@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Console\Commands\fe2SyncUser;
 use App\Helpers\FE2;
 use App\Helpers\Hiorg;
 use App\Helpers\Sync\Factory;
@@ -69,6 +70,13 @@ class OrganizationController extends Controller
         ]);
         $org->update($data);
         return redirect()->route('settings')->with('message', 'Daten gespeichert');
+    }
+
+    public function sync()
+    {
+        \Artisan::call(fe2SyncUser::class);
+        return redirect()->route('settings')->with('message', 'Synchronisation durchgeführt');
+
     }
 
     public function setAdmin(GenericProvider $provider)
