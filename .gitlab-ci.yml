@@ -11,6 +11,7 @@ variables:
 
 stages:
   - build
+  - test
   - deploy
 
 build-branch:
@@ -37,6 +38,66 @@ build-prod:
   script:
     - docker build --cache-from $CI_CUSTOM_REGISTRY/hiorg-fe2/app:latest-dev -t $CI_CUSTOM_REGISTRY/hiorg-fe2/app:latest .
     - docker push $CI_CUSTOM_REGISTRY/hiorg-fe2/app:latest
+
+
+test-branch:
+  stage: test
+  before_script: []
+  image: $CI_CUSTOM_REGISTRY/hiorg-fe2/app:$CI_COMMIT_BRANCH
+  except:
+    - tags
+    - main
+    - merge_requests
+  script:
+    - composer install
+    - cp .env.example .env
+    - php artisan key:generate
+    - ./vendor/bin/phpunit --configuration phpunit.xml --log-junit report.xml
+
+  artifacts:
+    when: always
+    paths:
+      - report.xml
+    reports:
+      junit: report.xml
+
+test-dev:
+  stage: test
+  before_script: [ ]
+  image: $CI_CUSTOM_REGISTRY/hiorg-fe2/app:latest-dev
+  only:
+    - main
+  script:
+    - composer install
+    - cp .env.example .env
+    - php artisan key:generate
+    - ./vendor/bin/phpunit --configuration phpunit.xml --log-junit report.xml
+
+  artifacts:
+    when: always
+    paths:
+      - report.xml
+    reports:
+      junit: report.xml
+
+test-prod:
+  stage: test
+  before_script: [ ]
+  image: $CI_CUSTOM_REGISTRY/hiorg-fe2/app:latest
+  only:
+    - tags
+  script:
+    - composer install
+    - cp .env.example .env
+    - php artisan key:generate
+    - ./vendor/bin/phpunit --configuration phpunit.xml --log-junit report.xml
+
+  artifacts:
+    when: always
+    paths:
+      - report.xml
+    reports:
+      junit: report.xml
 deploy-dev:
   stage: deploy
   only:

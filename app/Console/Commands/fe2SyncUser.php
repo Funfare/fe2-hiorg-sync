@@ -2,9 +2,13 @@
 
 namespace App\Console\Commands;
 
+use App\Helpers\FE2;
+use App\Helpers\Hiorg;
 use App\Helpers\Sync\Factory;
 use App\Helpers\Sync\Generic;
+use App\Models\DestinationField;
 use App\Models\Organization;
+use App\Models\SourceField;
 use App\Models\Sync;
 use GuzzleHttp\Client;
 use Illuminate\Console\Command;
@@ -31,54 +35,96 @@ class fe2SyncUser extends Command
      */
     public function handle(GenericProvider $provider, Client $client)
     {
-
+        $sourceFields = SourceField::all()->keyBy('id');
+        $fields = DestinationField::pluck('key')->flip()->map(fn($i) => null)->toArray();
         $orgs = Organization::all();
-        $orgs->each(function(Organization $org) use ($provider, $client) {
-            $accessToken = new \League\OAuth2\Client\Token\AccessToken($org->hiorg_token);
-            if($accessToken->hasExpired()) {
-                $accessToken = $provider->getAccessToken('refresh_token', [
-                    'refresh_token' => $accessToken->getRefreshToken()
-                ]);
-                $org->hiorg_token = $accessToken->jsonSerialize();
-                $org->save();
-            }
+        $orgs->each(function(Organization $org) use ($provider, $client, $sourceFields, $fields) {
+            $hiorg = app(Hiorg::class, compact('client', 'provider', 'org'));
+            $data = $hiorg->getUsers();
 
-            $response = $client->get('https://api.hiorg-server.de/core/v1/personal', [
-                'headers' => [
-                    'Authorization' => $accessToken->getToken()
-                ]
-            ]);
-            $data = json_decode($response->getBody()->getContents(), JSON_OBJECT_AS_ARRAY);
-
-            $helper =  Factory::make($org);
             $sync = [
                 'source' => 'JUH WÜ FE2 Sync',
                 'personList' => [],
             ];
-
-            foreach ($data['data'] as $record) {
-                if(!$helper->isValid($record)) {
-                    continue;
-                }
-                $sync['personList'][] = $helper->getDataFromRecord($record);
-            }
-            $res = $client->post($org->fe2_link.'/rest/addressbook/sync', [
-                'json' => $sync,
-                'headers' => [
-                    'Authorization' => $org->fe2_sync_token
-                ]
+            $provisions = [];
+            $org->load([
+                'ruleSets' => fn($q) => $q->orderBy('execute_at_end')->orderBy('order')->where('type', '!=', 'spacer'),
+                'ruleSets.rules.sourceField',
+                'ruleSets.destinationField',
             ]);
-
+            $syncService = new \App\Services\Sync($sourceFields, $fields);
+            foreach($data['data'] as $row) {
+                $user = $syncService->getDataFromHiorgUser($row, $org->ruleSets);
+                if($user !== false) {
+                    $sync['personList'][] = \Arr::except($user, ['provisioning']);
+                    $provisions[$user['aPagerPro']] = $user['provisioning'];
+                }
+            }
+            $fe2 = app(FE2::class, compact('client', 'org'));
+            $fe2->syncUsers($sync);
             Sync::create([
                 'organization_id' => $org->id,
                 'type' => 'sync',
                 'data' => $sync,
             ]);
+
+            sleep(1);
+
+            $assignedProvision = [];
+            $allProvisionings = $fe2->getProvisionings();
+            $allUserProvisionings = $fe2->getUserProvisionings();
+            foreach ($provisions as $aPager => $provision) {
+                if(!\Str::contains($aPager, '@')) {
+                    // Tokens werden in der Provision-API klein geschrieben
+                    $aPager = mb_strtolower($aPager);
+                }
+                $user = $allUserProvisionings->where('apager', $aPager)->first();
+                $provId = $allProvisionings->where('name', $provision)->first()->id ?? null;
+                if($provId == null) {
+                    $assignedProvision[] = [
+                        'name' => $user->displayName,
+                        'reason' => 'err_prov_not_found',
+                        'provision' => $provision
+                    ];
+                    continue;
+                }
+                if($user == null) {
+                    $assignedProvision[] = [
+                        'name' => $aPager,
+                        'reason' => 'err_user_not_found',
+                        'provision' => $provision
+                    ];
+                    continue;
+                }
+                $update = false;
+                if(empty($user->apagerPersonData) || $user->apagerPersonData->version == 0) {
+                    $update = true;
+                    $reason = 'no_provisioning';
+                } elseif($user->apagerPersonData->provisioningId !== $provId) {
+                    $update = true;
+                    $reason = 'change_provisioning';
+                } elseif($user->apagerPersonData->provisioningId == $provId && $user->apagerPersonData->version < $user->apagerPersonData->provisioningVersion) {
+                    $update = true;
+                    $reason = 'update_provisioning';
+                }
+                if($update) {
+                    $fe2->assignProvisioning($user->id, $provId);
+                    $assignedProvision[] = [
+                        'name' => $user->displayName,
+                        'reason' => $reason,
+                        'provision' => $provId
+                    ];
+                }
+            }
+
+            Sync::create([
+                'organization_id' => $org->id,
+                'type' => 'prov',
+                'data' => $assignedProvision,
+            ]);
+
         });
 
-
-
-
-
     }
+
 }
