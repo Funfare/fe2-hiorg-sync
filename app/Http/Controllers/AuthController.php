@@ -47,7 +47,6 @@ class AuthController extends Controller
             $user = User::updateOrCreate(['key' => $hiorgUser['sub']], [
                 'name' => $hiorgUser['name'],
                 'email' => $hiorgUser['email'],
-                'is_admin' => in_array($hiorgUser['email'], config('app.admins.'.$org->key)),
                 'hiorg_token' => $accessToken->jsonSerialize(),
                 'organization_id' => $org->id
             ]);
@@ -59,6 +58,7 @@ class AuthController extends Controller
                     ['name' => 'Alarmgruppen'],
                     ['name' => 'Provisionierung'],
                 ]);
+                $user->update(['is_admin' => 1]);
             }
             Auth::login($user, true);
             return redirect()->route('home');

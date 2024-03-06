@@ -89,7 +89,7 @@ class Sync
         $destinationValue = $ruleSet->set_value;
         if($ruleSet->set_value_type === 'field') {
             $destinationValue = \Arr::get($data,$this->sourceFields->get($ruleSet->set_value)->key);
-            $sourceField = SourceField::find($ruleSet->set_value);
+            $sourceField = $this->sourceFields->get($ruleSet->set_value);
             if($sourceField->needs_extra_value) {
                 if($sourceField->key == 'attributes.qualifikationen') {
                     $key = 'liste';
@@ -112,9 +112,9 @@ class Sync
                 return \Arr::has($item, 'liste') && $item['liste'] == $ruleSet->set_value;
             });
             if($ruleSet->set_value_type == 'qualification:name') {
-                $destinationValue = $tmp['name'] ?? '';
+                $destinationValue = $tmp['name'] ?? null;
             } elseif($ruleSet->set_value_type == 'qualification:name_short') {
-                $destinationValue = $tmp['name_kurz'] ?? '';
+                $destinationValue = $tmp['name_kurz'] ?? null;
             }
         } elseif(str_starts_with($ruleSet->set_value_type, 'phone:formatted')) {
             $destinationValue = \Arr::get($data,$this->sourceFields->get($ruleSet->set_value)->key);
@@ -134,6 +134,7 @@ class Sync
             $destinationValue = implode(',', $destinationValue);
         }
 
+
         if($ruleSet->type == 'abort') {
             return false;
         } elseif($ruleSet->type == 'set' && empty($fields[$ruleSet->destinationField->key])) {
@@ -149,7 +150,7 @@ class Sync
                 $fields[$ruleSet->destinationField->key] = $destinationValue;
             }
         } elseif($ruleSet->type == 'add') {
-            if($ruleSet->destinationField->type == 'array') {
+            if($ruleSet->destinationField->type == 'array' && $destinationValue !== null) {
                 $fields[$ruleSet->destinationField->key][] = $destinationValue;
             } elseif ($ruleSet->destinationField->type == 'string') {
                 $fields[$ruleSet->destinationField->key] .= $destinationValue;
