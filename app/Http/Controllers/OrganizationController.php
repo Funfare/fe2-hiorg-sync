@@ -57,8 +57,6 @@ class OrganizationController extends Controller
             'fe2_user' => 'nullable',
             'fe2_pass' => 'nullable',
             'fe2_sync_token' => 'nullable',
-            'fe2_provisioning_user' => 'nullable',
-            'fe2_provisioning_leader' => 'nullable',
         ]);
         $org->update($data);
         return redirect()->route('settings')->with('message', 'Daten gespeichert');

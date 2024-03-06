@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\SourceField;
+use Illuminate\Support\Str;
 
 class Sync
 {
@@ -18,6 +19,10 @@ class Sync
             if($user === false) {
                 return false;
             }
+        }
+        $user['aPagerProFieldMode'] = 'TOKEN';
+        if(Str::contains($user['aPagerPro'], '@')) {
+            $user['aPagerProFieldMode'] = 'LEGACY';
         }
         return $user;
     }
@@ -122,6 +127,8 @@ class Sync
             $destinationValue = str_replace([' ', '/', '-', '+'], '', $destinationValue);
         } elseif($ruleSet->set_value_type == 'copy:fe2-field') {
             $destinationValue = $fields[$ruleSet->set_value] ?? null;
+        } elseif($ruleSet->set_value_type == 'email:dummy') {
+            $destinationValue = md5($fields['email']).'-fe2@trash-mail.com';
         }
         if(is_array($destinationValue) && $ruleSet->destinationField->type == 'string') {
             $destinationValue = implode(',', $destinationValue);

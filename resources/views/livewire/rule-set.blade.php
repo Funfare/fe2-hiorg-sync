@@ -54,6 +54,7 @@
                         <option value="qualification:name_short">Qualifikation: Abkürzung</option>
                         <option value="phone:formatted">Telefonnummer formatiert</option>
                         <option value="copy:fe2-field">FE2 Feld</option>
+                        <option value="email:dummy">E-Mail Fake-Adresse</option>
                     </select>
                     <label class="form-label">Wert</label>
                 </div>

@@ -61,12 +61,12 @@ class FE2
 
     public function assignProvisioning($user, $provision)
     {
-        dump($user, $provision);
-        return true;
-        return $this->client->get($this->org->fe2_link. '/rest/apager/provisioningToSingleDevice/'.$user.'?provId='.$provision.'&useAutoMode=false', [
+        $response = $this->client->get($this->org->fe2_link. '/rest/apager/provisioningToSingleDevice/'.$user.'?provId='.$provision.'&useAutoMode=false', [
             'headers' => [
                 'Authorization' => 'JWT '.$this->getToken()
             ]
         ]);
+
+        return $response;
     }
 }
