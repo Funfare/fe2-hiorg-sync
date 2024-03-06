@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\Hiorg;
 use App\Helpers\Sync\Factory;
 use App\Helpers\Sync\Generic;
+use App\Models\DestinationField;
 use App\Models\Organization;
+use App\Models\SourceField;
 use App\Models\User;
 use App\Models\Sync;
 use GuzzleHttp\Client;
@@ -18,22 +21,16 @@ class OrganizationController extends Controller
     {
         $user = \Auth::user();
         $org = $user->organization;
-        $data = $this->getHiorgData($user, $provider, $client);
-        $record = $data['data'];
-        $helper = Factory::make($user->organization);
-        $valid = $helper->isValid($record);
+        $fe2 = $this->getSyncData($client, $provider);
+        $valid = $fe2 !== false;
         $syncs = $org->syncs()->latest()->paginate(20);
         return view('organizations.show', compact('org', 'syncs', 'valid'));
     }
 
     public function me(GenericProvider $provider, Client $client)
     {
-        $user = \Auth::user();
-        $data = $this->getHiorgData($user, $provider, $client);
-        $record = $data['data'];
-        $helper = Factory::make($user->organization);
-        $valid = $helper->isValid($record);
-        $fe2 = $helper->getDataFromRecord($record);
+        $fe2 = $this->getSyncData($client, $provider);
+        $valid = $fe2 !== false;
 
         return view('organizations.me', compact('valid', 'fe2'));
     }
@@ -148,25 +145,22 @@ class OrganizationController extends Controller
         return redirect()->route('home')->with('message', 'Testalarm wurde ausgelöst');
     }
 
-    private function getHiorgData(User $user, $provider, $client)
-    {
-        return \Cache::remember('hiorg-self-user-' . $user->id, now()->addHour(), function () use ($provider, $client, $user) {
-            $accessToken = new \League\OAuth2\Client\Token\AccessToken($user->hiorg_token);
-            if ($accessToken->hasExpired()) {
-                $accessToken = $provider->getAccessToken('refresh_token', [
-                    'refresh_token' => $accessToken->getRefreshToken()
-                ]);
-                $user->hiorg_token = $accessToken->jsonSerialize();
-                $user->save();
-            }
+    private function getSyncData(Client $client, GenericProvider $provider) {
+        $user = \Auth::user();
+        $org = $user->organization;
+        $sourceFields = SourceField::all()->keyBy('id');
+        $fe2Fields = DestinationField::orderBy('name')->get();
+        $fields = $fe2Fields->pluck('key')->flip()->map(fn($i) => null)->toArray();
+        $hiorg = app(Hiorg::class, compact('client', 'provider', 'org'));
+        $data = $hiorg->getUser($user);
 
-            $response = $client->get('https://api.hiorg-server.de/core/v1/personal/selbst', [
-                'headers' => [
-                    'Authorization' => $accessToken->getToken()
-                ]
-            ]);
-            return json_decode($response->getBody()->getContents(), JSON_OBJECT_AS_ARRAY);
-        });
+        $org->load([
+            'ruleSets' => fn($q) => $q->orderBy('execute_at_end')->orderBy('order')->where('type', '!=', 'spacer'),
+            'ruleSets.rules.sourceField',
+            'ruleSets.destinationField',
+        ]);
+        $syncService = new \App\Services\Sync($sourceFields, $fields);
+        return $syncService->getDataFromHiorgUser($data['data'], $org->ruleSets);
     }
 
 }

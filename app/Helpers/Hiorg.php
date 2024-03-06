@@ -3,6 +3,7 @@
 namespace App\Helpers;
 
 use App\Models\Organization;
+use App\Models\User;
 use GuzzleHttp\Client;
 use League\OAuth2\Client\Provider\GenericProvider;
 
@@ -34,6 +35,24 @@ class Hiorg
         return \Cache::remember($key, now()->addHour(), function() {
             $accessToken = $this->getToken();
             $response = $this->client->get('https://api.hiorg-server.de/core/v1/personal', [
+                'headers' => [
+                    'Authorization' => $accessToken->getToken()
+                ]
+            ]);
+            return json_decode($response->getBody()->getContents(), JSON_OBJECT_AS_ARRAY);
+        });
+
+    }
+
+    public function getUser(User $user, $forceFetch = false)
+    {
+        $key = 'hiorg-user-'.$user->id;
+        if($forceFetch) {
+            \Cache::forget($key);
+        }
+        return \Cache::remember($key, now()->addHour(), function() {
+            $accessToken = $this->getToken();
+            $response = $this->client->get('https://api.hiorg-server.de/core/v1/personal/selbst', [
                 'headers' => [
                     'Authorization' => $accessToken->getToken()
                 ]
