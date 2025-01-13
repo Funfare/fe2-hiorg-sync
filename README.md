@@ -1,8 +1,7 @@
-<p align="center"><img src="./resources/images/juh_logo.svg" width="300" alt="JUH Logo"></p>
 
 ## 📖  About FE2 - HiOrg Synchronisation
 
-This application is a synchronisation tool for the aPager Pro synchronsiation between the JUH HiOrg-Server and the FE2 alamos server. It is based on the Laravel Framework and uses the HiOrg-Server API to get the data from the HiOrg-Server.
+This application is a synchronisation tool for the aPager Pro synchronsiation between the HiOrg-Server and the FE2 alamos server. It is based on the Laravel Framework and uses the HiOrg-Server API to get the data from the HiOrg-Server.
 
 ## 🛠 Built With
   <ul>
